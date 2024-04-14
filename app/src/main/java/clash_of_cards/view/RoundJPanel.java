@@ -1,11 +1,7 @@
 package clash_of_cards.view;
 
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.BasicStroke;
+import javax.swing.*;
+import java.awt.*;
 
 public class RoundJPanel extends JPanel {
     private static final RenderingHints HINTS = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -13,9 +9,19 @@ public class RoundJPanel extends JPanel {
     private final int arcHeight = 20;
     private final int borderWidth = 1;
     private final Color borderColor;
+    private final Dimension preferredSize;
 
+    public RoundJPanel(int width, int height, Color borderColor) {
+        super();
+        this.preferredSize = new Dimension(width, height);
+        this.borderColor = borderColor;
+        this.setOpaque(false);
+        this.setLayout(null);
+    }
+        
     public RoundJPanel(int width, int height, int x, int y, Color borderColor) {
         super();
+        this.preferredSize = new Dimension(width, height); 
         this.setSize(width, height);
         this.setLocation(x, y);
         this.setOpaque(false);
@@ -23,6 +29,11 @@ public class RoundJPanel extends JPanel {
         this.borderColor = borderColor;
     }
 
+    @Override
+    public Dimension getPreferredSize() {
+        return preferredSize;
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

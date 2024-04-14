@@ -2,6 +2,7 @@ package clash_of_cards.view;
 
 import javax.swing.*;
 import java.awt.*;
+import clash_of_cards.text_corpus.*;
 
 public class Table {
 
@@ -10,8 +11,9 @@ public class Table {
     private JPanel mainPanel;
     private JButton backButton;
     private MainMenuView mainMenuView;
-    private int numWhiteCards = 4;
+    private int numWhiteCards = 6;
     private Color borderColorWhite = new Color(140, 140, 140);
+    private Sentences sentence = new Sentences(); 
 
     public Table(MainMenuView mainMenu) {
         this.mainMenuView = mainMenu;
@@ -120,17 +122,17 @@ public class Table {
         cardPanel.setBackground(new Color(40, 40, 40));
         cardPanel.setLayout(null); 
     
-        JLabel sentence = new JLabel("<html>Kids, Dad is trying something new this week.<br>It is called _____.</html>");
-        sentence.setFont(new Font("Consolas", Font.PLAIN, 20));
-        sentence.setForeground(new Color(240, 240, 240)); 
-        sentence.setBounds(10, 50, 180, 200); 
-        sentence.setHorizontalAlignment(JLabel.CENTER); 
-        sentence.setVerticalAlignment(JLabel.CENTER);
-        sentence.setHorizontalTextPosition(JLabel.CENTER);
-        sentence.setVerticalTextPosition(JLabel.CENTER);
-        sentence.setOpaque(false);
+        JLabel sentenceLabel = new JLabel(sentence.getRandomSentence());
+        sentenceLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
+        sentenceLabel.setForeground(new Color(240, 240, 240)); 
+        sentenceLabel.setBounds(10, 50, 180, 200); 
+        sentenceLabel.setHorizontalAlignment(JLabel.CENTER); 
+        sentenceLabel.setVerticalAlignment(JLabel.CENTER);
+        sentenceLabel.setHorizontalTextPosition(JLabel.CENTER);
+        sentenceLabel.setVerticalTextPosition(JLabel.CENTER);
+        sentenceLabel.setOpaque(false);
     
-        cardPanel.add(sentence);
+        cardPanel.add(sentenceLabel);
         mainPanel.add(cardPanel);
     
         frame.revalidate();
