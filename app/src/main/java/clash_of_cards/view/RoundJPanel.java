@@ -40,4 +40,3 @@ public class RoundJPanel extends JPanel {
         g2d.drawRoundRect(borderWidth / 2, borderWidth / 2, width - borderWidth, height - borderWidth, arcWidth, arcHeight);
     }
 }
-

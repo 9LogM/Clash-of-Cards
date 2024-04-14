@@ -8,33 +8,38 @@ public class Table {
     Dimension screenSize;
     private JFrame frame;
     private JPanel mainPanel;
+    private JButton backButton;
+    private MainMenuView mainMenuView;
     private int numWhiteCards = 4;
     private Color borderColorWhite = new Color(140, 140, 140);
 
-    public Table() {
-        frame = new JFrame("Clash of Cards");
+    public Table(MainMenuView mainMenu) {
+        this.mainMenuView = mainMenu;
+        frame = new JFrame("Clash of Cards - Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(null);
 
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize(screenSize.width, screenSize.height);
 
-        mainPanel = new JPanel() {
-            @Override
-            public Dimension getPreferredSize() {
-                return screenSize;
-            }
-        };
+        mainPanel = new JPanel();
         mainPanel.setLayout(null);
         mainPanel.setBounds(0, 0, screenSize.width, screenSize.height);
         mainPanel.setBackground(new Color(80, 80, 80));
-        frame.add(mainPanel);
 
+        backButton = new JButton("Back to Main Menu");
+        ButtonUtils.customButton(backButton);
+        backButton.setBounds(50, screenSize.height - 150, 250, 50);
+        backButton.addActionListener(e -> {
+        frame.setVisible(false);
+        mainMenuView.showMainMenu();
+        });
+        mainPanel.add(backButton);
+
+        frame.add(mainPanel);
         addScorePanel();
         blackCard();
         whiteCards();
-
-        frame.setVisible(true);
     }
 
     private void addScorePanel() {
@@ -130,7 +135,11 @@ public class Table {
     
         frame.revalidate();
         frame.repaint();
-    }    
+    }
+    
+    public void showTable() {
+        frame.setVisible(true);
+    }
 }
 
 
