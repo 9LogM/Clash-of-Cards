@@ -1,4 +1,4 @@
-package clash_of_cards.view;
+package clash_of_cards.utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ public class ButtonUtils {
         button.setBackground(new Color(50, 50, 50));
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(200, 50));
+        button.setPreferredSize(new Dimension(300, 50));
         button.setFont(new Font("Consolas", Font.BOLD, 20));
     }
 }

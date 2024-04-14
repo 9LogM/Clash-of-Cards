@@ -2,15 +2,15 @@ package clash_of_cards.view;
 
 import java.awt.*;
 import javax.swing.*;
+import clash_of_cards.utils.*;
 
 public class MainMenuView {
     private JFrame mainFrame;
     private JPanel mainPanel;
     private JPanel buttonPanel;
     private JLabel titleLabel;
-    private JButton startGame;
-    private JButton instructions;
-    private JButton highScores;
+    private JButton startGame, instructions, highScores;
+    private JButton startFamilyEdition, startNerdEdition, backButton;
 
     public MainMenuView() {
         initializeComponents();
@@ -22,10 +22,16 @@ public class MainMenuView {
         startGame = new JButton("Start Game");
         instructions = new JButton("Instructions");
         highScores = new JButton("High Scores");
-        
+        startFamilyEdition = new JButton("Start Family Edition");
+        startNerdEdition = new JButton("Start Nerd Edition");
+        backButton = new JButton("Back to Main Menu");
+
         ButtonUtils.customButton(startGame);
         ButtonUtils.customButton(instructions);
         ButtonUtils.customButton(highScores);
+        ButtonUtils.customButton(startFamilyEdition);
+        ButtonUtils.customButton(startNerdEdition);
+        ButtonUtils.customButton(backButton);
     }
 
     private void setupUI() {
@@ -43,6 +49,14 @@ public class MainMenuView {
         buttonPanel.add(instructions);
         buttonPanel.add(highScores);
 
+        startFamilyEdition.setVisible(false);
+        startNerdEdition.setVisible(false);
+        backButton.setVisible(false);
+
+        buttonPanel.add(startFamilyEdition);
+        buttonPanel.add(startNerdEdition);
+        buttonPanel.add(backButton);
+
         mainPanel.add(titleLabel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -53,12 +67,31 @@ public class MainMenuView {
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
-        
-        startGame.addActionListener(e -> {
-            mainFrame.setVisible(false);
-            Table table = new Table(this);
-            table.showTable();
-        });
+
+        startGame.addActionListener(e -> toggleButtonVisibility());
+        startFamilyEdition.addActionListener(e -> showGameView());
+        startNerdEdition.addActionListener(e -> showGameView());
+        backButton.addActionListener(e -> toggleButtonVisibility());
+    }
+
+    private void toggleButtonVisibility() {
+        boolean showMainButtons = startGame.isVisible();
+
+        startGame.setVisible(!showMainButtons);
+        instructions.setVisible(!showMainButtons);
+        highScores.setVisible(!showMainButtons);
+        startFamilyEdition.setVisible(showMainButtons);
+        startNerdEdition.setVisible(showMainButtons);
+        backButton.setVisible(showMainButtons);
+
+        buttonPanel.revalidate();
+        buttonPanel.repaint();
+    }
+
+    private void showGameView() {
+        mainFrame.setVisible(false);
+        GameView game = new GameView(this);
+        game.showGameView();
     }
 
     public void showMainMenu() {

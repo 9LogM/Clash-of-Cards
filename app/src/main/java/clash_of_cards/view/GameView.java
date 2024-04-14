@@ -3,8 +3,9 @@ package clash_of_cards.view;
 import javax.swing.*;
 import java.awt.*;
 import clash_of_cards.text_corpus.*;
+import clash_of_cards.utils.*;
 
-public class Table {
+public class GameView {
 
     Dimension screenSize;
     private JFrame frame;
@@ -15,7 +16,7 @@ public class Table {
     private Color borderColorWhite = new Color(140, 140, 140);
     private Sentences sentence = new Sentences(); 
 
-    public Table(MainMenuView mainMenu) {
+    public GameView(MainMenuView mainMenu) {
         this.mainMenuView = mainMenu;
         frame = new JFrame("Clash of Cards - Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -139,9 +140,7 @@ public class Table {
         frame.repaint();
     }
     
-    public void showTable() {
+    public void showGameView() {
         frame.setVisible(true);
     }
 }
-
-
