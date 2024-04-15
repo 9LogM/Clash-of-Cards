@@ -1,9 +1,24 @@
 package clash_of_cards.view;
 
-import javax.swing.*;
-import java.awt.*;
-import clash_of_cards.text_corpus.*;
-import clash_of_cards.utils.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Toolkit;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
+import clash_of_cards.text_corpus.Answers;
+import clash_of_cards.text_corpus.Sentences;
+import clash_of_cards.utils.ButtonUtils;
 
 public class GameView {
     private String edition;
@@ -12,6 +27,8 @@ public class GameView {
     private JPanel mainPanel;
     private JButton backButton;
     private MainMenuView mainMenuView;
+    private JButton viewCardsButton;
+    private String judge = new String("Kate");
 
     public GameView(MainMenuView mainMenu, String edition) {
         this.mainMenuView = mainMenu;
@@ -44,18 +61,18 @@ public class GameView {
         frame.add(mainPanel);
         addScorePanel();
         blackCard();
-        whiteCards();
     }
 
     private void addScorePanel() {
-        JPanel scorePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JPanel scorePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 35, 10));
         scorePanel.setOpaque(false);
         scorePanel.add(createPlayerPanel("Mohamed G", "15"));
         scorePanel.add(createPlayerPanel("Mohamed H", "15"));
         scorePanel.add(createPlayerPanel("Wallash", "15"));
+        scorePanel.add(createPlayerPanel("Kate", "15"));
 
-        int panelWidth = 500;
-        int panelHeight = 100;
+        int panelWidth = 600;
+        int panelHeight = 200;
         scorePanel.setBounds((screenSize.width - panelWidth) / 2, 30, panelWidth, panelHeight);
         mainPanel.add(scorePanel);
     }
@@ -75,8 +92,25 @@ public class GameView {
         scoreLabel.setFont(new Font("Consolas", Font.BOLD, 18));
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        if(!playerName.equals(judge)) {
+            viewCardsButton = new JButton("View Cards");
+        } else {
+            viewCardsButton = new JButton("Judge");
+            viewCardsButton.setEnabled(false);
+        }
+
+        viewCardsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        viewCardsButton.setForeground(new Color(240, 240, 240));
+        viewCardsButton.setBackground(new Color(50, 50, 50));
+        viewCardsButton.setBorderPainted(false);
+        viewCardsButton.setFocusPainted(false);
+        viewCardsButton.setFont(new Font("Consolas", Font.BOLD, 16));
+
+        viewCardsButton.addActionListener(e -> showWhiteCards(playerName));
+
         playerPanel.add(nameLabel);
         playerPanel.add(scoreLabel);
+        playerPanel.add(viewCardsButton);
 
         return playerPanel;
     }
@@ -118,7 +152,7 @@ public class GameView {
         int cardWidth = 400;
         int cardHeight = 200;
         int x = (screenSize.width - cardWidth) / 2;
-        int y = (screenSize.height - cardHeight) / 3;
+        int y = (screenSize.height - cardHeight) / 2;
 
         RoundJPanel cardPanel = new RoundJPanel(cardWidth, cardHeight, 50, 70, new Color(140, 140, 140));
         cardPanel.setLocation(x, y);
@@ -140,6 +174,11 @@ public class GameView {
 
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void showWhiteCards(String playerName) {
+        frame.setVisible(false);
+        new WhiteCards(edition, playerName);
     }
 
     public void showGameView() {
