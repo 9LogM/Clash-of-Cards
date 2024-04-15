@@ -69,8 +69,8 @@ public class MainMenuView {
         mainFrame.setVisible(true);
 
         startGame.addActionListener(e -> toggleButtonVisibility());
-        startFamilyEdition.addActionListener(e -> showGameView());
-        startNerdEdition.addActionListener(e -> showGameView());
+        startFamilyEdition.addActionListener(e -> showGameView("family"));
+        startNerdEdition.addActionListener(e -> showGameView("nerd"));
         backButton.addActionListener(e -> toggleButtonVisibility());
     }
 
@@ -88,9 +88,9 @@ public class MainMenuView {
         buttonPanel.repaint();
     }
 
-    private void showGameView() {
+    private void showGameView(String edition) {
         mainFrame.setVisible(false);
-        GameView game = new GameView(this);
+        GameView game = new GameView(this, edition);
         game.showGameView();
     }
 
