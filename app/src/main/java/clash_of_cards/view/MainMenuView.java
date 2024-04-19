@@ -15,9 +15,10 @@ public class MainMenuView {
     private JButton startFamilyEdition, startNerdEdition, backButton, confirmNames;
     private JButton playerThree, playerFour, playerFive;
     private JTextField[] playerNames;
-    private List<String> confirmedPlayerNames = new ArrayList<>();
+    private List<String> confirmedPlayerNames;
 
     public MainMenuView() {
+        confirmedPlayerNames = new ArrayList<>();
         initializeComponents();
         setupUI();
         setupMainFrame();
@@ -37,29 +38,23 @@ public class MainMenuView {
         playerNames = new JTextField[5];
         for (int i = 0; i < playerNames.length; i++) {
             playerNames[i] = new JTextField(10);
-            styleTextField(playerNames[i]);
+            GUIUtils.styleTextField(playerNames[i]);
         }
         nameEntryPanel = new JPanel(new FlowLayout());
         for (JTextField playerName : playerNames) {
             nameEntryPanel.add(playerName);
         }
 
-        ButtonUtils.customButton(startGame);
-        ButtonUtils.customButton(instructions);
-        ButtonUtils.customButton(highScores);
-        ButtonUtils.customButton(startFamilyEdition);
-        ButtonUtils.customButton(startNerdEdition);
-        ButtonUtils.customButton(backButton);
-        ButtonUtils.customButton(confirmNames);
-        ButtonUtils.customButton(playerThree);
-        ButtonUtils.customButton(playerFour);
-        ButtonUtils.customButton(playerFive);
-    }
-
-    private void styleTextField(JTextField textField) {
-        textField.setFont(new Font("SansSerif", Font.PLAIN, 18));
-        textField.setHorizontalAlignment(JTextField.CENTER);
-        textField.setPreferredSize(new Dimension(150, 50));
+        GUIUtils.styleButton(startGame);
+        GUIUtils.styleButton(instructions);
+        GUIUtils.styleButton(highScores);
+        GUIUtils.styleButton(startFamilyEdition);
+        GUIUtils.styleButton(startNerdEdition);
+        GUIUtils.styleButton(backButton);
+        GUIUtils.styleButton(confirmNames);
+        GUIUtils.styleButton(playerThree);
+        GUIUtils.styleButton(playerFour);
+        GUIUtils.styleButton(playerFive);
     }
 
     private void setupUI() {
@@ -156,9 +151,8 @@ public class MainMenuView {
         for (JTextField playerName : playerNames) {
             playerName.setVisible(false);
         }
-
-        buttonPanel.revalidate();
-        buttonPanel.repaint();
+        
+        GUIUtils.updatePanel(buttonPanel);
     }
 
     private void showPlayerSelection() {
@@ -170,8 +164,7 @@ public class MainMenuView {
         playerFour.setVisible(true);
         playerFive.setVisible(true);
 
-        buttonPanel.revalidate();
-        buttonPanel.repaint();
+        GUIUtils.updatePanel(buttonPanel);
     }
 
     private void configureNameEntry(int numberOfPlayers) {
@@ -184,8 +177,7 @@ public class MainMenuView {
         playerFour.setVisible(false);
         playerFive.setVisible(false);
 
-        nameEntryPanel.revalidate();
-        nameEntryPanel.repaint();
+        GUIUtils.updatePanel(nameEntryPanel);
     }
 
     private void showGameView(String edition) {
