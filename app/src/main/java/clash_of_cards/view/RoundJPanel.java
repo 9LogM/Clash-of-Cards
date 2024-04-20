@@ -12,15 +12,13 @@ public class RoundJPanel extends JPanel {
     private final Dimension preferredSize;
 
     public RoundJPanel(int width, int height, Color borderColor) {
-        super();
         this.preferredSize = new Dimension(width, height);
         this.borderColor = borderColor;
         this.setOpaque(false);
         this.setLayout(null);
     }
-        
+    
     public RoundJPanel(int width, int height, int x, int y, Color borderColor) {
-        super();
         this.preferredSize = new Dimension(width, height); 
         this.setSize(width, height);
         this.setLocation(x, y);
