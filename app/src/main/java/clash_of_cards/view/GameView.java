@@ -5,19 +5,20 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import clash_of_cards.model.*;
+import clash_of_cards.controller.MainMenuController;
 
 public class GameView {
     private String edition;
     private JFrame frame;
     private JPanel mainPanel;
-    private MainMenuView mainMenuView;
+    private MainMenuController mainMenuController;
     private HashMap<String, Player> playerCards;
     private HashMap<String, String> storedCards;
     private JPanel whiteCardsPanel;
     private List<String> playerNames;
 
-    public GameView(MainMenuView mainMenu, String edition, List<String> playerNames) {
-        this.mainMenuView = mainMenu;
+    public GameView(MainMenuController mainMenuController, String edition, List<String> playerNames) {
+        this.mainMenuController = mainMenuController;
         this.edition = edition;
         this.playerNames = playerNames;
         this.playerCards = new HashMap<>();
@@ -37,12 +38,15 @@ public class GameView {
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
-        gbc.gridy = 0;
         gbc.weightx = 1;
-        gbc.weighty = 1;
+
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 0, 40, 0);
         setupScorePanel(gbc);
 
+        gbc.insets = new Insets(0, 0, 0, 0);
         gbc.gridy = 1;
+        gbc.weighty = 1;
         setupBlackCard(gbc);
 
         gbc.gridy = 2;
@@ -50,7 +54,7 @@ public class GameView {
         setupWhiteCardsPanel(gbc);
 
         gbc.gridy = 3;
-        gbc.weighty = 0.0;
+        gbc.weighty = 0;
         setupOptionsPanel(gbc);
 
         frame.add(mainPanel, BorderLayout.CENTER);
@@ -76,11 +80,11 @@ public class GameView {
     }
 
     private void setupOptionsPanel(GridBagConstraints gbc) {
-        Runnable backAction = () -> GUIUtils.changeView(frame, false, mainMenuView);
-        Runnable hideCardsAction = () -> {
-            whiteCardsPanel.removeAll();
-            GUIUtils.updatePanel(whiteCardsPanel);
+        Runnable backAction = () -> {
+            frame.setVisible(false);
+            mainMenuController.showMainMenu();
         };
+        Runnable hideCardsAction = this::hidePlayerCards;
         Runnable judgeCardsAction = this::displayStoredCards;
 
         JPanel optionsPanel = OptionsPanel.createOptionsPanel(backAction, hideCardsAction, judgeCardsAction);
@@ -126,6 +130,11 @@ public class GameView {
             JToggleButton cardButton = WhiteCardPanel.createWhiteCard(card, noAction);
             whiteCardsPanel.add(cardButton);
         }
+        GUIUtils.updatePanel(whiteCardsPanel);
+    }
+
+    private void hidePlayerCards() {
+        whiteCardsPanel.removeAll();
         GUIUtils.updatePanel(whiteCardsPanel);
     }
 

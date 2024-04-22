@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WhiteCardPanel {
-    private static final Dimension CARD_SIZE = new Dimension(200, 150);
+    private static final Dimension CARD_SIZE = new Dimension(200, 250);
     private static final Font CARD_FONT = new Font("Consolas", Font.PLAIN, 16);
 
     public static JToggleButton createWhiteCard(String cardText, Runnable onSelection) {
@@ -15,6 +15,7 @@ public class WhiteCardPanel {
                 onSelection.run();
             }
         });
+        
         cardButton.setPreferredSize(CARD_SIZE);
         cardButton.setFont(CARD_FONT);
         cardButton.setOpaque(false);
@@ -27,13 +28,13 @@ public class WhiteCardPanel {
         roundPanel.setLayout(new BorderLayout());
         roundPanel.add(cardButton, BorderLayout.CENTER);
 
-        JToggleButton cardToggleButton = new JToggleButton();
-        cardToggleButton.add(roundPanel);
-        cardToggleButton.setPreferredSize(CARD_SIZE);
-        cardToggleButton.setContentAreaFilled(false);
-        cardToggleButton.setBorderPainted(false);
-        cardToggleButton.setOpaque(false);
+        JToggleButton wrapperToggleButton = new JToggleButton();
+        wrapperToggleButton.add(roundPanel);
+        wrapperToggleButton.setPreferredSize(CARD_SIZE);
+        wrapperToggleButton.setContentAreaFilled(false);
+        wrapperToggleButton.setBorderPainted(false);
+        wrapperToggleButton.setOpaque(false);
 
-        return cardToggleButton;
+        return wrapperToggleButton;
     }
 }

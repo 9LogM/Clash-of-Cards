@@ -23,11 +23,4 @@ public class GUIUtils {
         panel.revalidate();
         panel.repaint();
     }
-
-    public static void changeView(JFrame frame, boolean showFrame, MainMenuView mainMenuView) {
-        frame.setVisible(showFrame);
-        if (!showFrame) {
-            mainMenuView.showMainMenu();
-        }
-    }
 }

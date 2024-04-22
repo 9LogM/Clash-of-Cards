@@ -13,7 +13,7 @@ public class BlackCardPanel {
         JPanel cardContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
         cardContainer.setOpaque(false);
 
-        RoundJPanel cardPanel = new RoundJPanel(CARD_WIDTH, CARD_HEIGHT, 50, 70, new Color(140, 140, 140));
+        RoundJPanel cardPanel = new RoundJPanel(CARD_WIDTH, CARD_HEIGHT, new Color(140, 140, 140));
         cardPanel.setBackground(new Color(40, 40, 40));
         cardPanel.setLayout(new BorderLayout());
 

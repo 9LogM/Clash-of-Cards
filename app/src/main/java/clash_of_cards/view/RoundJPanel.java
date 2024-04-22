@@ -14,24 +14,14 @@ public class RoundJPanel extends JPanel {
     public RoundJPanel(int width, int height, Color borderColor) {
         this.preferredSize = new Dimension(width, height);
         this.borderColor = borderColor;
-        this.setOpaque(false);
-        this.setLayout(null);
-    }
-    
-    public RoundJPanel(int width, int height, int x, int y, Color borderColor) {
-        this.preferredSize = new Dimension(width, height); 
-        this.setSize(width, height);
-        this.setLocation(x, y);
-        this.setOpaque(false);
-        this.setLayout(null);
-        this.borderColor = borderColor;
+        setOpaque(false);
     }
 
     @Override
     public Dimension getPreferredSize() {
         return preferredSize;
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -43,7 +33,6 @@ public class RoundJPanel extends JPanel {
 
         g2d.setColor(getBackground());
         g2d.fillRoundRect(0, 0, width, height, arcWidth, arcHeight);
-
         g2d.setColor(borderColor);
         g2d.setStroke(new BasicStroke(borderWidth));
         g2d.drawRoundRect(borderWidth / 2, borderWidth / 2, width - borderWidth, height - borderWidth, arcWidth, arcHeight);
