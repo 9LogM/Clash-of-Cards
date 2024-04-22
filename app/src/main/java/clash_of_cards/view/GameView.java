@@ -73,7 +73,7 @@ public class GameView {
     }
 
     private void setupWhiteCardsPanel(GridBagConstraints gbc) {
-        whiteCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        whiteCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
         whiteCardsPanel.setBackground(new Color(80, 80, 80));
         whiteCardsPanel.setOpaque(false);
         mainPanel.add(whiteCardsPanel, gbc);
@@ -107,7 +107,7 @@ public class GameView {
         List<String> cards = player.getCards();
         for (String card : cards) {
             Runnable onCardSelected = () -> storedCards.put(playerName, card);
-            JToggleButton cardButton = WhiteCardPanel.createWhiteCard(card, onCardSelected);
+            JToggleButton cardButton = WhiteCard.createWhiteCard(card, onCardSelected);
             group.add(cardButton);
             whiteCardsPanel.add(cardButton);
         }
@@ -127,7 +127,7 @@ public class GameView {
         whiteCardsPanel.removeAll();
         for (String card : storedCards.values()) {
             Runnable noAction = () -> {};
-            JToggleButton cardButton = WhiteCardPanel.createWhiteCard(card, noAction);
+            JToggleButton cardButton = WhiteCard.createWhiteCard(card, noAction);
             whiteCardsPanel.add(cardButton);
         }
         GUITools.updatePanel(whiteCardsPanel);
