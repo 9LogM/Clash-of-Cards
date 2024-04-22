@@ -3,7 +3,7 @@ package clash_of_cards.view;
 import javax.swing.*;
 import java.awt.*;
 
-public class BlackCardPanel {
+public class BlackCard {
     private static final int CARD_WIDTH = 400;
     private static final int CARD_HEIGHT = 200;
     private static final Color TEXT_COLOR = new Color(240, 240, 240);

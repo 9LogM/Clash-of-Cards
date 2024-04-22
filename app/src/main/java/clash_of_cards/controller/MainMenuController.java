@@ -2,7 +2,7 @@ package clash_of_cards.controller;
 
 import clash_of_cards.view.MainMenuView;
 import clash_of_cards.view.GameView;
-import clash_of_cards.view.GUIUtils;
+import clash_of_cards.view.GUITools;
 import javax.swing.*;
 
 public class MainMenuController {
@@ -50,7 +50,7 @@ public class MainMenuController {
             playerName.setVisible(false);
         }
 
-        GUIUtils.updatePanel(view.buttonPanel);
+        GUITools.updatePanel(view.buttonPanel);
     }
 
     private void showPlayerSelection() {
@@ -62,7 +62,7 @@ public class MainMenuController {
         view.playerFour.setVisible(true);
         view.playerFive.setVisible(true);
 
-        GUIUtils.updatePanel(view.buttonPanel);
+        GUITools.updatePanel(view.buttonPanel);
     }
 
     private void configureNameEntry(int numberOfPlayers) {
@@ -75,7 +75,7 @@ public class MainMenuController {
         view.playerFour.setVisible(false);
         view.playerFive.setVisible(false);
 
-        GUIUtils.updatePanel(view.nameEntryPanel);
+        GUITools.updatePanel(view.nameEntryPanel);
     }
 
     private void showGameView(String edition) {

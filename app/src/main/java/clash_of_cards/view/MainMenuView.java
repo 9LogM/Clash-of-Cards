@@ -38,23 +38,25 @@ public class MainMenuView {
         playerNames = new JTextField[5];
         for (int i = 0; i < playerNames.length; i++) {
             playerNames[i] = new JTextField(10);
-            GUIUtils.styleTextField(playerNames[i]);
+            playerNames[i].setFont(new Font("SansSerif", Font.PLAIN, 18));
+            playerNames[i].setHorizontalAlignment(JTextField.CENTER);
+            playerNames[i].setPreferredSize(new Dimension(150, 50));
         }
         nameEntryPanel = new JPanel(new FlowLayout());
         for (JTextField playerName : playerNames) {
             nameEntryPanel.add(playerName);
         }
 
-        GUIUtils.styleButton(startGame);
-        GUIUtils.styleButton(instructions);
-        GUIUtils.styleButton(highScores);
-        GUIUtils.styleButton(startFamilyEdition);
-        GUIUtils.styleButton(startNerdEdition);
-        GUIUtils.styleButton(backButton);
-        GUIUtils.styleButton(confirmNames);
-        GUIUtils.styleButton(playerThree);
-        GUIUtils.styleButton(playerFour);
-        GUIUtils.styleButton(playerFive);
+        GUITools.styleButton(startGame);
+        GUITools.styleButton(instructions);
+        GUITools.styleButton(highScores);
+        GUITools.styleButton(startFamilyEdition);
+        GUITools.styleButton(startNerdEdition);
+        GUITools.styleButton(backButton);
+        GUITools.styleButton(confirmNames);
+        GUITools.styleButton(playerThree);
+        GUITools.styleButton(playerFour);
+        GUITools.styleButton(playerFive);
     }
 
     public void setupUI() {

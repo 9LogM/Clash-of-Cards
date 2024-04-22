@@ -68,8 +68,8 @@ public class GameView {
     private void setupBlackCard(GridBagConstraints gbc) {
         Sentences sentences = new Sentences(edition);
         String sentence = sentences.getRandomSentence();
-        JPanel blackCardPanel = BlackCardPanel.createBlackCard(sentence);
-        mainPanel.add(blackCardPanel, gbc);
+        JPanel blackCard = BlackCard.createBlackCard(sentence);
+        mainPanel.add(blackCard, gbc);
     }
 
     private void setupWhiteCardsPanel(GridBagConstraints gbc) {
@@ -111,7 +111,7 @@ public class GameView {
             group.add(cardButton);
             whiteCardsPanel.add(cardButton);
         }
-        GUIUtils.updatePanel(whiteCardsPanel);
+        GUITools.updatePanel(whiteCardsPanel);
     }
 
     private JPanel PlayerPanel(String playerName) {
@@ -130,12 +130,12 @@ public class GameView {
             JToggleButton cardButton = WhiteCardPanel.createWhiteCard(card, noAction);
             whiteCardsPanel.add(cardButton);
         }
-        GUIUtils.updatePanel(whiteCardsPanel);
+        GUITools.updatePanel(whiteCardsPanel);
     }
 
     private void hidePlayerCards() {
         whiteCardsPanel.removeAll();
-        GUIUtils.updatePanel(whiteCardsPanel);
+        GUITools.updatePanel(whiteCardsPanel);
     }
 
     public void showGameView() {

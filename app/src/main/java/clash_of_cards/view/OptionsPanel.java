@@ -8,15 +8,15 @@ public class OptionsPanel {
 
     public static JPanel createOptionsPanel(Runnable backAction, Runnable hideCardsAction, Runnable judgeCardsAction) {
         JButton backButton = new JButton("Back to Main Menu");
-        GUIUtils.styleButton(backButton);
+        GUITools.styleButton(backButton);
         backButton.addActionListener(e -> backAction.run());
 
         JButton hideCardsButton = new JButton("Hide Cards");
-        GUIUtils.styleButton(hideCardsButton);
+        GUITools.styleButton(hideCardsButton);
         hideCardsButton.addActionListener(e -> hideCardsAction.run());
 
         JButton judgeCardsButton = new JButton("Judge Cards");
-        GUIUtils.styleButton(judgeCardsButton);
+        GUITools.styleButton(judgeCardsButton);
         judgeCardsButton.addActionListener(e -> judgeCardsAction.run());
 
         JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
