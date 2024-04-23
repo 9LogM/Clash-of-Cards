@@ -59,7 +59,7 @@ public class MainMenuController {
         setVisibilityForComponents(new JComponent[]{view.pointsMode, view.roundsMode, view.backToMainMenu}, true);
         setVisibilityForComponents(new JComponent[]{view.confirmNames, view.playerThree, view.playerFour, view.playerFive}, false);
         GUITools.updatePanel(view.mainPanel);
-        hideNameEntryComponents(); // Hide name entry components after confirming names
+        hideNameEntryComponents();
     }
 
     public void showMainMenu() {

@@ -1,82 +1,53 @@
 package clash_of_cards.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import javax.swing.*;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class GameModel {
-    private List<Player> players;
-    private List<String> whiteCards;
-    private List<String> blackCards;
-    private int targetPoints;
-    private int numberOfRounds;
     private String edition;
-    private int currentJudgeIndex;
-    private String currentBlackCard;
-    private List<String> currentWhiteCardsSelection;
+    private HashMap<String, Player> playerCards;
+    private HashMap<String, String> storedCards;
 
-    public GameModel(String edition, List<String> playerNames, int targetPoints, int numberOfRounds) {
+    public GameModel(String edition) {
         this.edition = edition;
-        this.targetPoints = targetPoints;
-        this.numberOfRounds = numberOfRounds;
-        players = new ArrayList<>();
-        for (String name : playerNames) {
-            players.add(new Player(name));
-        }
-        loadCards();
-        shufflePlayers();
-        currentJudgeIndex = 0;
+        this.playerCards = new HashMap<>();
+        this.storedCards = new HashMap<>();
     }
 
-    private void loadCards() {
+    public void assignCardsToPlayer(String playerName) {
+        Player player = new Player();
         Answers answers = new Answers(edition);
-        Sentences sentences = new Sentences(edition);
-        whiteCards = answers.getAllAnswers();
-        blackCards = sentences.getAllSentences();
-        Collections.shuffle(whiteCards);
-        Collections.shuffle(blackCards);
-    }
-
-    private void shufflePlayers() {
-        Collections.shuffle(players);
-    }
-
-    public void startNewRound() {
-        currentBlackCard = blackCards.remove(0);
-        currentWhiteCardsSelection = new ArrayList<>();
-        distributeWhiteCards();
-    }
-
-    private void distributeWhiteCards() {
-        for (Player player : players) {
-            while (player.getCards().size() < 6) {
-                player.addCard(whiteCards.remove(0));
-            }
+        for (int i = 0; i < 6; i++) {
+            player.addCard(answers.getRandomAnswer());
         }
+        playerCards.put(playerName, player);
     }
 
-    public void submitWhiteCard(String playerName, String card) {
-        currentWhiteCardsSelection.add(card);
-        players.stream()
-               .filter(p -> p.getName().equals(playerName))
-               .findFirst()
-               .ifPresent(p -> p.getCards().remove(card));
+    public List<String> getPlayerCards(String playerName) {
+        return playerCards.get(playerName).getCards();
     }
 
-    public String getCurrentBlackCard() {
-        return currentBlackCard;
+    public void storeSelectedCard(String playerName, String card) {
+        storedCards.put(playerName, card);
     }
 
-    public List<String> getCurrentWhiteCardsSelection() {
-        return currentWhiteCardsSelection;
+    public HashMap<String, String> getStoredCards() {
+        return storedCards;
     }
 
-    public Player getCurrentJudge() {
-        return players.get(currentJudgeIndex);
+    public Player getPlayer(String playerName) {
+        if (!playerCards.containsKey(playerName)) {
+            assignCardsToPlayer(playerName);
+        }
+        return playerCards.get(playerName);
     }
 
-    public void nextJudge() {
-        currentJudgeIndex = (currentJudgeIndex + 1) % players.size();
+    public int getPlayerScore(String playerName) {
+        return getPlayer(playerName).getScore();
+    }
+
+    public String getEdition() {
+        return edition;
     }
 }

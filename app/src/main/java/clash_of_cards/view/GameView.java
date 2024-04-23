@@ -1,28 +1,23 @@
 package clash_of_cards.view;
 
+import clash_of_cards.controller.MainMenuController;
+import clash_of_cards.model.*;
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
-import clash_of_cards.model.*;
-import clash_of_cards.controller.MainMenuController;
 
 public class GameView {
-    private String edition;
     private JFrame frame;
     private JPanel mainPanel;
-    private MainMenuController mainMenuController;
-    private HashMap<String, Player> playerCards;
-    private HashMap<String, String> storedCards;
     private JPanel whiteCardsPanel;
+    private GameModel gameModel;
+    private MainMenuController mainMenuController;
     private List<String> playerNames;
 
     public GameView(MainMenuController mainMenuController, String edition, List<String> playerNames) {
         this.mainMenuController = mainMenuController;
-        this.edition = edition;
+        this.gameModel = new GameModel(edition);
         this.playerNames = playerNames;
-        this.playerCards = new HashMap<>();
-        this.storedCards = new HashMap<>();
         initializeFrame();
     }
 
@@ -66,7 +61,7 @@ public class GameView {
     }
 
     private void setupBlackCard(GridBagConstraints gbc) {
-        Sentences sentences = new Sentences(edition);
+        Sentences sentences = new Sentences(gameModel.getEdition());
         String sentence = sentences.getRandomSentence();
         JPanel blackCard = BlackCard.createBlackCard(sentence);
         mainPanel.add(blackCard, gbc);
@@ -91,22 +86,12 @@ public class GameView {
         mainPanel.add(optionsPanel, gbc);
     }
 
-    private void assignCardsToPlayer(String playerName) {
-        Player player = new Player();
-        Answers answers = new Answers(edition);
-        for (int i = 0; i < 6; i++) {
-            player.addCard(answers.getRandomAnswer());
-        }
-        playerCards.put(playerName, player);
-    }
-
     private void displayPlayerCards(String playerName) {
         whiteCardsPanel.removeAll();
         ButtonGroup group = new ButtonGroup();
-        Player player = playerCards.get(playerName);
-        List<String> cards = player.getCards();
+        List<String> cards = gameModel.getPlayerCards(playerName);
         for (String card : cards) {
-            Runnable onCardSelected = () -> storedCards.put(playerName, card);
+            Runnable onCardSelected = () -> gameModel.storeSelectedCard(playerName, card);
             JToggleButton cardButton = WhiteCard.createWhiteCard(card, onCardSelected);
             group.add(cardButton);
             whiteCardsPanel.add(cardButton);
@@ -115,17 +100,14 @@ public class GameView {
     }
 
     private JPanel PlayerPanel(String playerName) {
-        if (!playerCards.containsKey(playerName)) {
-            assignCardsToPlayer(playerName);
-        }
-        Player player = playerCards.get(playerName);
+        int score = gameModel.getPlayerScore(playerName);
         Runnable viewCardsAction = () -> displayPlayerCards(playerName);
-        return PlayerPanel.createPlayerPanel(playerName, player.getScore(), viewCardsAction);
+        return PlayerPanel.createPlayerPanel(playerName, score, viewCardsAction);
     }
 
     private void displayStoredCards() {
         whiteCardsPanel.removeAll();
-        for (String card : storedCards.values()) {
+        for (String card : gameModel.getStoredCards().values()) {
             Runnable noAction = () -> {};
             JToggleButton cardButton = WhiteCard.createWhiteCard(card, noAction);
             whiteCardsPanel.add(cardButton);
