@@ -21,48 +21,22 @@ public class MainMenuController {
         view.playerThree.addActionListener(e -> configureNameEntry(3));
         view.playerFour.addActionListener(e -> configureNameEntry(4));
         view.playerFive.addActionListener(e -> configureNameEntry(5));
-        view.confirmNames.addActionListener(e -> {
-            view.confirmedPlayerNames.clear();
-            for (JTextField playerName : view.playerNames) {
-                if (playerName.isVisible() && !playerName.getText().trim().isEmpty()) {
-                    view.confirmedPlayerNames.add(playerName.getText().trim());
-                }
-            }
-            showGameView(view.startFamilyEdition.isVisible() ? "Family" : "Nerd");
-        });
+        view.confirmNames.addActionListener(e -> confirmNames());
+        view.backToMainMenu.addActionListener(e -> showMainMenu());
     }
 
     private void toggleButtonVisibility() {
-        boolean showMainButtons = view.startGame.isVisible();
-
-        view.startGame.setVisible(!showMainButtons);
-        view.instructions.setVisible(!showMainButtons);
-        view.highScores.setVisible(!showMainButtons);
-        view.startFamilyEdition.setVisible(showMainButtons);
-        view.startNerdEdition.setVisible(showMainButtons);
-        view.backButton.setVisible(showMainButtons);
-
-        view.playerThree.setVisible(false);
-        view.playerFour.setVisible(false);
-        view.playerFive.setVisible(false);
-        view.confirmNames.setVisible(false);
-        for (JTextField playerName : view.playerNames) {
-            playerName.setVisible(false);
-        }
-
-        GUITools.updatePanel(view.buttonPanel);
+        boolean showMainButtons = !view.startGame.isVisible();
+        setVisibilityForComponents(new JComponent[]{view.startGame, view.instructions, view.highScores}, showMainButtons);
+        setVisibilityForComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition}, !showMainButtons);
+        view.backButton.setVisible(true);
+        hideNameEntryComponents();
     }
 
     private void showPlayerSelection() {
-        view.startFamilyEdition.setVisible(false);
-        view.startNerdEdition.setVisible(false);
-        view.backButton.setVisible(true);
-
-        view.playerThree.setVisible(true);
-        view.playerFour.setVisible(true);
-        view.playerFive.setVisible(true);
-
-        GUITools.updatePanel(view.buttonPanel);
+        setVisibilityForComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition}, false);
+        setVisibilityForComponents(new JComponent[]{view.playerThree, view.playerFour, view.playerFive}, true);
+        hideNameEntryComponents();
     }
 
     private void configureNameEntry(int numberOfPlayers) {
@@ -70,36 +44,43 @@ public class MainMenuController {
             view.playerNames[i].setVisible(i < numberOfPlayers);
         }
         view.confirmNames.setVisible(true);
-
-        view.playerThree.setVisible(false);
-        view.playerFour.setVisible(false);
-        view.playerFive.setVisible(false);
-
+        view.nameEntryPanel.setVisible(true);
+        setVisibilityForComponents(new JComponent[]{view.playerThree, view.playerFour, view.playerFive}, false);
         GUITools.updatePanel(view.nameEntryPanel);
     }
 
-    private void showGameView(String edition) {
-        view.mainFrame.setVisible(false);
-        GameView game = new GameView(this, edition, view.confirmedPlayerNames);
-        game.showGameView();
+    private void confirmNames() {
+        view.confirmedPlayerNames.clear();
+        for (JTextField playerName : view.playerNames) {
+            if (playerName.isVisible() && !playerName.getText().trim().isEmpty()) {
+                view.confirmedPlayerNames.add(playerName.getText().trim());
+            }
+        }
+        setVisibilityForComponents(new JComponent[]{view.pointsMode, view.roundsMode, view.backToMainMenu}, true);
+        setVisibilityForComponents(new JComponent[]{view.confirmNames, view.playerThree, view.playerFour, view.playerFive}, false);
+        GUITools.updatePanel(view.mainPanel);
+        hideNameEntryComponents(); // Hide name entry components after confirming names
     }
 
     public void showMainMenu() {
-        view.startFamilyEdition.setVisible(false);
-        view.startNerdEdition.setVisible(false);
+        setVisibilityForComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition, view.confirmNames, view.pointsMode, view.roundsMode, view.backToMainMenu, view.playerThree, view.playerFour, view.playerFive}, false);
+        setVisibilityForComponents(new JComponent[]{view.startGame, view.instructions, view.highScores}, true);
         view.backButton.setVisible(false);
-        view.confirmNames.setVisible(false);
-        for (JButton playerButton : new JButton[]{view.playerThree, view.playerFour, view.playerFive}) {
-            playerButton.setVisible(false);
+        hideNameEntryComponents();
+        view.mainFrame.setVisible(true);
+    }
+
+    private void setVisibilityForComponents(JComponent[] components, boolean visible) {
+        for (JComponent component : components) {
+            component.setVisible(visible);
         }
+    }
+
+    private void hideNameEntryComponents() {
+        view.nameEntryPanel.setVisible(false);
         for (JTextField playerName : view.playerNames) {
             playerName.setVisible(false);
         }
-
-        view.startGame.setVisible(true);
-        view.instructions.setVisible(true);
-        view.highScores.setVisible(true);
-
-        view.mainFrame.setVisible(true);
+        view.confirmNames.setVisible(false);
     }
 }

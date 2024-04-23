@@ -13,6 +13,7 @@ public class MainMenuView {
     public JLabel titleLabel;
     public JButton startGame, instructions, highScores;
     public JButton startFamilyEdition, startNerdEdition, backButton, confirmNames;
+    public JButton pointsMode, roundsMode, backToMainMenu;
     public JButton playerThree, playerFour, playerFive;
     public JTextField[] playerNames;
     public List<String> confirmedPlayerNames;
@@ -32,6 +33,9 @@ public class MainMenuView {
         startNerdEdition = new JButton("Start Nerd Edition");
         backButton = new JButton("Back to Main Menu");
         confirmNames = new JButton("Confirm Names");
+        pointsMode = new JButton("Points Mode");
+        roundsMode = new JButton("Rounds Mode");
+        backToMainMenu = new JButton("Back to Main Menu");
         playerThree = new JButton("3 Players");
         playerFour = new JButton("4 Players");
         playerFive = new JButton("5 Players");
@@ -54,6 +58,9 @@ public class MainMenuView {
         GUITools.styleButton(startNerdEdition);
         GUITools.styleButton(backButton);
         GUITools.styleButton(confirmNames);
+        GUITools.styleButton(pointsMode);
+        GUITools.styleButton(roundsMode);
+        GUITools.styleButton(backToMainMenu);
         GUITools.styleButton(playerThree);
         GUITools.styleButton(playerFour);
         GUITools.styleButton(playerFive);
@@ -73,22 +80,12 @@ public class MainMenuView {
         buttonPanel.add(startGame);
         buttonPanel.add(instructions);
         buttonPanel.add(highScores);
-
-        startFamilyEdition.setVisible(false);
-        startNerdEdition.setVisible(false);
-        backButton.setVisible(false);
-        confirmNames.setVisible(false);
-        for (JButton playerButton : new JButton[]{playerThree, playerFour, playerFive}) {
-            playerButton.setVisible(false);
-        }
-        for (JTextField playerName : playerNames) {
-            playerName.setVisible(false);
-        }
-
         buttonPanel.add(startFamilyEdition);
         buttonPanel.add(startNerdEdition);
         buttonPanel.add(backButton);
         buttonPanel.add(confirmNames);
+        buttonPanel.add(pointsMode);
+        buttonPanel.add(roundsMode);
         buttonPanel.add(playerThree);
         buttonPanel.add(playerFour);
         buttonPanel.add(playerFive);
