@@ -1,7 +1,8 @@
 package clash_of_cards.view;
 
 import clash_of_cards.controller.MainMenuController;
-import clash_of_cards.model.*;
+import clash_of_cards.model.GameModel;
+import clash_of_cards.model.Sentences;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -14,9 +15,9 @@ public class GameView {
     private MainMenuController mainMenuController;
     private List<String> playerNames;
 
-    public GameView(MainMenuController mainMenuController, String edition, List<String> playerNames) {
+    public GameView(MainMenuController mainMenuController, GameModel gameModel, List<String> playerNames) {
         this.mainMenuController = mainMenuController;
-        this.gameModel = new GameModel(edition);
+        this.gameModel = gameModel;
         this.playerNames = playerNames;
         initializeFrame();
     }
@@ -105,13 +106,20 @@ public class GameView {
         return PlayerPanel.createPlayerPanel(playerName, score, viewCardsAction);
     }
 
-    private void displayStoredCards() {
+    public void displayStoredCards() {
         whiteCardsPanel.removeAll();
-        for (String card : gameModel.getStoredCards().values()) {
-            Runnable noAction = () -> {};
-            JToggleButton cardButton = WhiteCard.createWhiteCard(card, noAction);
+        ButtonGroup group = new ButtonGroup();
+        gameModel.getStoredCards().forEach((playerName, card) -> {
+            Runnable selectAction = () -> {
+                gameModel.endRound(playerName);
+                if (gameModel.checkGameEnd()) {
+                    showEndGame();
+                }
+            };
+            JToggleButton cardButton = WhiteCard.createWhiteCard(card, selectAction);
+            group.add(cardButton);
             whiteCardsPanel.add(cardButton);
-        }
+        });
         GUITools.updatePanel(whiteCardsPanel);
     }
 
@@ -122,5 +130,10 @@ public class GameView {
 
     public void showGameView() {
         frame.setVisible(true);
+    }
+
+    private void showEndGame() {
+        JOptionPane.showMessageDialog(frame, "Game Over!");
+        mainMenuController.showMainMenu();
     }
 }

@@ -10,11 +10,10 @@ public class MainMenuView {
     public JPanel mainPanel;
     public JPanel buttonPanel;
     public JPanel nameEntryPanel;
-    public JLabel titleLabel;
-    public JButton startGame, instructions, highScores;
-    public JButton startFamilyEdition, startNerdEdition, backButton, confirmNames;
-    public JButton pointsMode, roundsMode, backToMainMenu;
-    public JButton playerThree, playerFour, playerFive;
+    public JLabel titleLabel, targetScoreLabel, numberOfRoundsLabel;
+    public JButton play, instructions, highScores, startFamilyEdition, startNerdEdition, confirmNames, pointsMode, roundsMode;
+    public JButton playerThree, playerFour, playerFive, backButton, startGame;
+    public JTextField targetScoreField, numberOfRoundsField;
     public JTextField[] playerNames;
     public List<String> confirmedPlayerNames;
 
@@ -26,7 +25,7 @@ public class MainMenuView {
     }
 
     public void initializeComponents() {
-        startGame = new JButton("Start Game");
+        play = new JButton("Play");
         instructions = new JButton("Instructions");
         highScores = new JButton("High Scores");
         startFamilyEdition = new JButton("Start Family Edition");
@@ -35,23 +34,33 @@ public class MainMenuView {
         confirmNames = new JButton("Confirm Names");
         pointsMode = new JButton("Points Mode");
         roundsMode = new JButton("Rounds Mode");
-        backToMainMenu = new JButton("Back to Main Menu");
+        startGame = new JButton("Start Game");
         playerThree = new JButton("3 Players");
         playerFour = new JButton("4 Players");
         playerFive = new JButton("5 Players");
+
+        targetScoreLabel = new JLabel("Target Score:");
+        targetScoreLabel.setFont(new Font("Consolas", Font.BOLD, 20));
+        targetScoreLabel.setForeground(new Color(240, 240, 240));
+        targetScoreField = new JTextField(10);
+        numberOfRoundsLabel = new JLabel("Number of Rounds:");
+        numberOfRoundsLabel.setFont(new Font("Consolas", Font.BOLD, 20));
+        numberOfRoundsLabel.setForeground(new Color(240, 240, 240));
+        numberOfRoundsField = new JTextField(10);
+
         playerNames = new JTextField[5];
         for (int i = 0; i < playerNames.length; i++) {
             playerNames[i] = new JTextField(10);
-            playerNames[i].setFont(new Font("SansSerif", Font.PLAIN, 18));
-            playerNames[i].setHorizontalAlignment(JTextField.CENTER);
-            playerNames[i].setPreferredSize(new Dimension(150, 50));
+            GUITools.styleField(playerNames[i]);
         }
         nameEntryPanel = new JPanel(new FlowLayout());
         for (JTextField playerName : playerNames) {
             nameEntryPanel.add(playerName);
         }
 
-        GUITools.styleButton(startGame);
+        GUITools.styleField(targetScoreField);
+        GUITools.styleField(numberOfRoundsField);
+        GUITools.styleButton(play);
         GUITools.styleButton(instructions);
         GUITools.styleButton(highScores);
         GUITools.styleButton(startFamilyEdition);
@@ -60,7 +69,7 @@ public class MainMenuView {
         GUITools.styleButton(confirmNames);
         GUITools.styleButton(pointsMode);
         GUITools.styleButton(roundsMode);
-        GUITools.styleButton(backToMainMenu);
+        GUITools.styleButton(startGame);
         GUITools.styleButton(playerThree);
         GUITools.styleButton(playerFour);
         GUITools.styleButton(playerFive);
@@ -77,34 +86,39 @@ public class MainMenuView {
 
         buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(70, 70, 70));
-        buttonPanel.add(startGame);
+        buttonPanel.add(play);
+        buttonPanel.add(backButton);
         buttonPanel.add(instructions);
         buttonPanel.add(highScores);
         buttonPanel.add(startFamilyEdition);
         buttonPanel.add(startNerdEdition);
-        buttonPanel.add(backButton);
         buttonPanel.add(confirmNames);
         buttonPanel.add(pointsMode);
         buttonPanel.add(roundsMode);
+        buttonPanel.add(targetScoreLabel);
+        buttonPanel.add(targetScoreField);
+        buttonPanel.add(numberOfRoundsLabel);
+        buttonPanel.add(numberOfRoundsField);
         buttonPanel.add(playerThree);
         buttonPanel.add(playerFour);
         buttonPanel.add(playerFive);
+        buttonPanel.add(startGame);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(titleLabel, gbc);
+        
 
         nameEntryPanel.setBackground(new Color(70, 70, 70));
         gbc.gridy = 1;
-        gbc.weighty = 0.0;
+        gbc.weighty = 0;
         mainPanel.add(nameEntryPanel, gbc);
 
         gbc.gridy = 2;
-        gbc.weighty = 0.0;
         mainPanel.add(buttonPanel, gbc);
     }
 

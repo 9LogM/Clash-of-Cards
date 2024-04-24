@@ -27,4 +27,8 @@ public class Player {
     public void addCard(String card) {
         cards.add(card);
     }
+
+    public void incrementScore() {
+        score++;
+    }
 }

@@ -13,6 +13,12 @@ public class GUITools {
         button.setFont(new Font("Consolas", Font.BOLD, 20));
     }
 
+    public static void styleField(JTextField field) {
+        field.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        field.setHorizontalAlignment(JTextField.CENTER);
+        field.setPreferredSize(new Dimension(150, 50));
+    }
+
     public static void updatePanel(JPanel panel) {
         panel.revalidate();
         panel.repaint();
