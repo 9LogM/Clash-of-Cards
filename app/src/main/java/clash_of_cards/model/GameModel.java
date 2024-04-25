@@ -1,7 +1,9 @@
 package clash_of_cards.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GameModel {
     private String edition;
@@ -41,7 +43,6 @@ public class GameModel {
 
     public void assignCardsToPlayer(String playerName) {
         Player player = new Player();
-        Answers answers = new Answers(edition);
         for (int i = 0; i < 6; i++) {
             player.addCard(answers.getRandomAnswer());
         }
@@ -78,16 +79,22 @@ public class GameModel {
     public void endRound(String winnerName) {
         Player winner = playerCards.get(winnerName);
         winner.incrementScore();
-        storedCards.values().forEach(card -> {
-            playerCards.forEach((playerName, player) -> {
-                player.getCards().remove(card);
-                player.addCard(answers.getRandomAnswer());
+        
+        Set<String> uniqueCards = new HashSet<>(storedCards.values());
+        
+        for (Player player : playerCards.values()) {
+            uniqueCards.forEach(card -> {
+                if (player.getCards().contains(card)) {
+                    player.removeCard(card);
+                    player.addCard(answers.getRandomAnswer());
+                }
             });
-        });
+        }
+        
         storedCards.clear();
         currentRound++;
     }
-
+    
     public boolean checkGameEnd() {
         if (targetScore > 0) {
             return playerCards.values().stream().anyMatch(player -> player.getScore() >= targetScore);
@@ -96,4 +103,5 @@ public class GameModel {
         }
         return false;
     }
+    
 }

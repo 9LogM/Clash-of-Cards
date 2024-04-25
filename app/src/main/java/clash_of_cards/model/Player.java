@@ -21,11 +21,15 @@ public class Player {
     }
 
     public List<String> getCards() {
-        return cards;
+        return new ArrayList<>(cards);
     }
 
     public void addCard(String card) {
         cards.add(card);
+    }
+
+    public void removeCard(String card) {
+        cards.remove(card);
     }
 
     public void incrementScore() {

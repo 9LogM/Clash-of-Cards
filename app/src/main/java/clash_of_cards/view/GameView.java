@@ -11,14 +11,17 @@ public class GameView {
     private JFrame frame;
     private JPanel mainPanel;
     private JPanel whiteCardsPanel;
+    private JPanel blackCardPanel;
     private GameModel gameModel;
     private MainMenuController mainMenuController;
     private List<String> playerNames;
+    private Sentences sentences;
 
     public GameView(MainMenuController mainMenuController, GameModel gameModel, List<String> playerNames) {
         this.mainMenuController = mainMenuController;
         this.gameModel = gameModel;
         this.playerNames = playerNames;
+        this.sentences = new Sentences(gameModel.getEdition());
         initializeFrame();
     }
 
@@ -62,10 +65,19 @@ public class GameView {
     }
 
     private void setupBlackCard(GridBagConstraints gbc) {
-        Sentences sentences = new Sentences(gameModel.getEdition());
+        blackCardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        blackCardPanel.setBackground(new Color(80, 80, 80));
+
+        updateBlackCard();
+        mainPanel.add(blackCardPanel, gbc);
+    }
+
+    private void updateBlackCard() {
         String sentence = sentences.getRandomSentence();
-        JPanel blackCard = BlackCard.createBlackCard(sentence);
-        mainPanel.add(blackCard, gbc);
+        blackCardPanel.removeAll();
+        blackCardPanel.add(BlackCard.createBlackCard(sentence));
+        blackCardPanel.revalidate();
+        blackCardPanel.repaint();
     }
 
     private void setupWhiteCardsPanel(GridBagConstraints gbc) {
@@ -112,14 +124,26 @@ public class GameView {
         gameModel.getStoredCards().forEach((playerName, card) -> {
             Runnable selectAction = () -> {
                 gameModel.endRound(playerName);
-                if (gameModel.checkGameEnd()) {
-                    showEndGame();
-                }
+                updateRound();
             };
             JToggleButton cardButton = WhiteCard.createWhiteCard(card, selectAction);
             group.add(cardButton);
             whiteCardsPanel.add(cardButton);
         });
+        GUITools.updatePanel(whiteCardsPanel);
+    }
+
+    private void updateRound() {
+        if (gameModel.checkGameEnd()) {
+            showEndGame();
+        } else {
+            updateBlackCard();
+            hideJudgeCards();
+        }
+    }
+
+    private void hideJudgeCards() {
+        whiteCardsPanel.removeAll();
         GUITools.updatePanel(whiteCardsPanel);
     }
 
