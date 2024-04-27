@@ -5,7 +5,9 @@ import clash_of_cards.model.GameModel;
 import clash_of_cards.model.Sentences;
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameView {
     private JFrame frame;
@@ -16,12 +18,14 @@ public class GameView {
     private MainMenuController mainMenuController;
     private List<String> playerNames;
     private Sentences sentences;
+    private Map<String, PlayerPanel> playerPanels;
 
     public GameView(MainMenuController mainMenuController, GameModel gameModel, List<String> playerNames) {
         this.mainMenuController = mainMenuController;
         this.gameModel = gameModel;
         this.playerNames = playerNames;
         this.sentences = new Sentences(gameModel.getEdition());
+        this.playerPanels = new HashMap<>();
         initializeFrame();
     }
 
@@ -40,7 +44,7 @@ public class GameView {
         gbc.weightx = 1;
 
         gbc.gridy = 0;
-        gbc.insets = new Insets(10, 0, 40, 0);
+        gbc.insets = new Insets(0, 0, 40, 0);
         setupScorePanel(gbc);
 
         gbc.insets = new Insets(0, 0, 0, 0);
@@ -60,7 +64,15 @@ public class GameView {
     }
 
     private void setupScorePanel(GridBagConstraints gbc) {
-        JPanel scorePanel = ScorePanel.createScorePanel(playerNames, this::PlayerPanel);
+        JPanel scorePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 30));
+        scorePanel.setOpaque(false);
+        for (String playerName : playerNames) {
+            int score = gameModel.getPlayerScore(playerName);
+            Runnable viewCardsAction = () -> displayPlayerCards(playerName);
+            PlayerPanel playerPanel = new PlayerPanel(playerName, score, viewCardsAction);
+            gameModel.addObserver(playerName, playerPanel);
+            scorePanel.add(playerPanel);
+        }
         mainPanel.add(scorePanel, gbc);
     }
 
@@ -110,12 +122,6 @@ public class GameView {
             whiteCardsPanel.add(cardButton);
         }
         GUITools.updatePanel(whiteCardsPanel);
-    }
-
-    private JPanel PlayerPanel(String playerName) {
-        int score = gameModel.getPlayerScore(playerName);
-        Runnable viewCardsAction = () -> displayPlayerCards(playerName);
-        return PlayerPanel.createPlayerPanel(playerName, score, viewCardsAction);
     }
 
     public void displayStoredCards() {

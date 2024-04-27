@@ -1,5 +1,7 @@
 package clash_of_cards.model;
 
+import clash_of_cards.model.ScoreObserver;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,12 +15,28 @@ public class GameModel {
     private int targetScore = 0;
     private int targetRounds = 0;
     private int currentRound = 0;
+    private HashMap<String, ScoreObserver> observers = new HashMap<>();
 
     public GameModel(String edition) {
         this.edition = edition;
         this.playerCards = new HashMap<>();
         this.storedCards = new HashMap<>();
         this.answers = new Answers(edition);
+    }
+
+    public void addObserver(String playerName, ScoreObserver observer) {
+        observers.put(playerName, observer);
+    }
+    
+    public void removeObserver(String playerName) {
+        observers.remove(playerName);
+    }
+    
+    private void notifyObservers(String playerName) {
+        if (observers.containsKey(playerName)) {
+            int score = getPlayerScore(playerName);
+            observers.get(playerName).updateScore(score);
+        }
     }
 
     public void setTargetScore(int score) {
@@ -79,6 +97,7 @@ public class GameModel {
     public void endRound(String winnerName) {
         Player winner = playerCards.get(winnerName);
         winner.incrementScore();
+        notifyObservers(winnerName);
         
         Set<String> uniqueCards = new HashSet<>(storedCards.values());
         
@@ -103,5 +122,4 @@ public class GameModel {
         }
         return false;
     }
-    
 }
