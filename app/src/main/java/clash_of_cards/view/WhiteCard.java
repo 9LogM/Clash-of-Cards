@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class WhiteCard {
-    private static final Dimension CARD_SIZE = new Dimension(200, 250);
+    private static final Dimension CARD_SIZE = new Dimension(170, 210);
     private static final Font CARD_FONT = new Font("Consolas", Font.PLAIN, 16);
     private static final Color HIGHLIGHT_COLOR = new Color(220, 248, 198);
     private static final Color NORMAL_BACKGROUND = Color.WHITE;

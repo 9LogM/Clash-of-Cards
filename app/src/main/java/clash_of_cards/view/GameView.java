@@ -2,7 +2,7 @@ package clash_of_cards.view;
 
 import clash_of_cards.controller.MainMenuController;
 import clash_of_cards.model.GameModel;
-import clash_of_cards.model.SentencesAndAnswers;
+import clash_of_cards.model.ContentLoader;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -14,16 +14,17 @@ public class GameView {
     private JPanel mainPanel;
     private JPanel whiteCardsPanel;
     private JPanel blackCardPanel;
+    private JLabel roundLabel;
     private GameModel gameModel;
     private MainMenuController mainMenuController;
     private List<String> playerNames;
-    private SentencesAndAnswers text;
+    private ContentLoader text;
 
     public GameView(MainMenuController mainMenuController, GameModel gameModel, List<String> playerNames) {
         this.mainMenuController = mainMenuController;
         this.gameModel = gameModel;
         this.playerNames = playerNames;
-        this.text = new SentencesAndAnswers(gameModel.getEdition());
+        this.text = new ContentLoader(gameModel.getEdition());
         initializeFrame();
     }
 
@@ -42,10 +43,8 @@ public class GameView {
         gbc.weightx = 1;
 
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 40, 0);
         setupScorePanel(gbc);
 
-        gbc.insets = new Insets(0, 0, 0, 0);
         gbc.gridy = 1;
         gbc.weighty = 1;
         setupBlackCard(gbc);
@@ -75,21 +74,30 @@ public class GameView {
     }
 
     private void setupBlackCard(GridBagConstraints gbc) {
-        blackCardPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        blackCardPanel = new JPanel();
+        blackCardPanel.setLayout(new BoxLayout(blackCardPanel, BoxLayout.Y_AXIS));
         blackCardPanel.setBackground(new Color(80, 80, 80));
-
+        roundLabel = new JLabel("Round " + gameModel.getCurrentRound());
+        roundLabel.setForeground(Color.WHITE);
+        roundLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        roundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        blackCardPanel.add(roundLabel);
+        blackCardPanel.add(Box.createVerticalStrut(10));
         updateBlackCard();
         mainPanel.add(blackCardPanel, gbc);
     }
-
+    
     private void updateBlackCard() {
-        String sentence = text.getRandomSentence();
+        String sentence = text.getRandom("Sentence");
         blackCardPanel.removeAll();
+        roundLabel.setText("Round " + gameModel.getCurrentRound());
+        blackCardPanel.add(roundLabel);
+        blackCardPanel.add(Box.createVerticalStrut(10));
         blackCardPanel.add(BlackCard.createBlackCard(sentence));
         blackCardPanel.revalidate();
         blackCardPanel.repaint();
     }
-
+    
     private void setupWhiteCardsPanel(GridBagConstraints gbc) {
         whiteCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
         whiteCardsPanel.setBackground(new Color(80, 80, 80));

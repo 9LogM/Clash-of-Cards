@@ -1,6 +1,5 @@
 package clash_of_cards.model;
 
-import clash_of_cards.model.ScoreObserver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,17 +10,17 @@ public class GameModel {
     private String edition;
     private HashMap<String, Player> playerCards;
     private HashMap<String, String> storedCards;
-    private SentencesAndAnswers text;
+    private ContentLoader text;
     private int targetScore = 0;
     private int targetRounds = 0;
-    private int currentRound = 0;
+    private int currentRound = 1;
     private HashMap<String, ScoreObserver> observers = new HashMap<>();
 
     public GameModel(String edition) {
         this.edition = edition;
         this.playerCards = new HashMap<>();
         this.storedCards = new HashMap<>();
-        this.text = new SentencesAndAnswers(edition);
+        this.text = new ContentLoader(edition);
     }
 
     public void addObserver(String playerName, ScoreObserver observer) {
@@ -62,7 +61,7 @@ public class GameModel {
     public void assignCardsToPlayer(String playerName) {
         Player player = new Player();
         for (int i = 0; i < 6; i++) {
-            player.addCard(text.getRandomAnswer());
+            player.addCard(text.getRandom("Answer"));
         }
         playerCards.put(playerName, player);
     }
@@ -82,7 +81,7 @@ public class GameModel {
     public void resetGame() {
         playerCards.clear();
         storedCards.clear();
-        currentRound = 0;
+        currentRound = 1;
         for (Player player : playerCards.values()) {
             player.resetScore();
         }
@@ -114,7 +113,7 @@ public class GameModel {
             uniqueCards.forEach(card -> {
                 if (player.getCards().contains(card)) {
                     player.removeCard(card);
-                    player.addCard(text.getRandomAnswer());
+                    player.addCard(text.getRandom("Answer"));
                 }
             });
         }
@@ -127,7 +126,7 @@ public class GameModel {
         if (targetScore > 0) {
             return playerCards.values().stream().anyMatch(player -> player.getScore() >= targetScore);
         } else if (targetRounds > 0) {
-            return currentRound >= targetRounds;
+            return currentRound > targetRounds;
         }
         return false;
     }
