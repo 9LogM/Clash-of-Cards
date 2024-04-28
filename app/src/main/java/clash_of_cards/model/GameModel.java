@@ -79,6 +79,15 @@ public class GameModel {
         return storedCards;
     }
 
+    public void resetGame() {
+        playerCards.clear();
+        storedCards.clear();
+        currentRound = 0;
+        for (Player player : playerCards.values()) {
+            player.resetScore();
+        }
+    }
+
     public Player getPlayer(String playerName) {
         if (!playerCards.containsKey(playerName)) {
             assignCardsToPlayer(playerName);

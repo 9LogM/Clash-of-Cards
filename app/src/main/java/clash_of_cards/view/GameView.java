@@ -18,14 +18,12 @@ public class GameView {
     private MainMenuController mainMenuController;
     private List<String> playerNames;
     private SentencesAndAnswers text;
-    private Map<String, PlayerPanel> playerPanels;
 
     public GameView(MainMenuController mainMenuController, GameModel gameModel, List<String> playerNames) {
         this.mainMenuController = mainMenuController;
         this.gameModel = gameModel;
         this.playerNames = playerNames;
         this.text = new SentencesAndAnswers(gameModel.getEdition());
-        this.playerPanels = new HashMap<>();
         initializeFrame();
     }
 
@@ -163,7 +161,9 @@ public class GameView {
     }
 
     private void showEndGame() {
-        JOptionPane.showMessageDialog(frame, "Game Over!");
+        JOptionPane.showMessageDialog(frame, "Game Over! Returning to main menu.");
+        gameModel.resetGame();
+        frame.dispose();
         mainMenuController.showMainMenu();
     }
 }
