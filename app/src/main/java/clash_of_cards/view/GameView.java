@@ -2,7 +2,7 @@ package clash_of_cards.view;
 
 import clash_of_cards.controller.MainMenuController;
 import clash_of_cards.model.GameModel;
-import clash_of_cards.model.Sentences;
+import clash_of_cards.model.SentencesAndAnswers;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -17,14 +17,14 @@ public class GameView {
     private GameModel gameModel;
     private MainMenuController mainMenuController;
     private List<String> playerNames;
-    private Sentences sentences;
+    private SentencesAndAnswers text;
     private Map<String, PlayerPanel> playerPanels;
 
     public GameView(MainMenuController mainMenuController, GameModel gameModel, List<String> playerNames) {
         this.mainMenuController = mainMenuController;
         this.gameModel = gameModel;
         this.playerNames = playerNames;
-        this.sentences = new Sentences(gameModel.getEdition());
+        this.text = new SentencesAndAnswers(gameModel.getEdition());
         this.playerPanels = new HashMap<>();
         initializeFrame();
     }
@@ -85,7 +85,7 @@ public class GameView {
     }
 
     private void updateBlackCard() {
-        String sentence = sentences.getRandomSentence();
+        String sentence = text.getRandomSentence();
         blackCardPanel.removeAll();
         blackCardPanel.add(BlackCard.createBlackCard(sentence));
         blackCardPanel.revalidate();

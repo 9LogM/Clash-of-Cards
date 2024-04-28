@@ -11,7 +11,7 @@ public class GameModel {
     private String edition;
     private HashMap<String, Player> playerCards;
     private HashMap<String, String> storedCards;
-    private Answers answers;
+    private SentencesAndAnswers text;
     private int targetScore = 0;
     private int targetRounds = 0;
     private int currentRound = 0;
@@ -21,7 +21,7 @@ public class GameModel {
         this.edition = edition;
         this.playerCards = new HashMap<>();
         this.storedCards = new HashMap<>();
-        this.answers = new Answers(edition);
+        this.text = new SentencesAndAnswers(edition);
     }
 
     public void addObserver(String playerName, ScoreObserver observer) {
@@ -62,7 +62,7 @@ public class GameModel {
     public void assignCardsToPlayer(String playerName) {
         Player player = new Player();
         for (int i = 0; i < 6; i++) {
-            player.addCard(answers.getRandomAnswer());
+            player.addCard(text.getRandomAnswer());
         }
         playerCards.put(playerName, player);
     }
@@ -105,7 +105,7 @@ public class GameModel {
             uniqueCards.forEach(card -> {
                 if (player.getCards().contains(card)) {
                     player.removeCard(card);
-                    player.addCard(answers.getRandomAnswer());
+                    player.addCard(text.getRandomAnswer());
                 }
             });
         }
