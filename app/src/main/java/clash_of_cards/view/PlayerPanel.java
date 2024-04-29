@@ -8,7 +8,7 @@ public class PlayerPanel extends JPanel implements ScoreObserver {
     private static final Color FOREGROUND_COLOR = Color.WHITE;
     private static final Font NAME_FONT = new Font("Consolas", Font.BOLD, 18);
     private static final Font SCORE_FONT = new Font("Consolas", Font.BOLD, 18);
-    private static final Color SCORE_COLOR = new Color(255, 140, 0);
+    private static final Color SCORE_COLOR = new Color(255, 205, 0);
     private static final Color BUTTON_BACKGROUND = new Color(50, 50, 50);
     private static final Font BUTTON_FONT = new Font("Consolas", Font.BOLD, 16);
 

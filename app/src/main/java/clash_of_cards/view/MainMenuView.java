@@ -112,7 +112,6 @@ public class MainMenuView {
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(titleLabel, gbc);
         
-
         nameEntryPanel.setBackground(new Color(70, 70, 70));
         gbc.gridy = 1;
         gbc.weighty = 0;

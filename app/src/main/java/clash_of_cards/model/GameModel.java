@@ -1,9 +1,11 @@
 package clash_of_cards.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class GameModel {
@@ -14,10 +16,12 @@ public class GameModel {
     private int targetScore = 0;
     private int targetRounds = 0;
     private int currentRound = 1;
+    private WinCountManager winCountManager;
     private HashMap<String, ScoreObserver> observers = new HashMap<>();
 
-    public GameModel(String edition) {
+    public GameModel(String edition, WinCountManager winCountManager) {
         this.edition = edition;
+        this.winCountManager = winCountManager;
         this.playerCards = new HashMap<>();
         this.storedCards = new HashMap<>();
         this.text = new ContentLoader(edition);
@@ -120,6 +124,10 @@ public class GameModel {
         
         storedCards.clear();
         currentRound++;
+
+        if (checkGameEnd()) {
+            winCountManager.incrementWinCount(winnerName);
+        }
     }
     
     public boolean checkGameEnd() {
@@ -129,5 +137,12 @@ public class GameModel {
             return currentRound > targetRounds;
         }
         return false;
+    }
+
+    public String getWinner() {
+        return playerCards.entrySet().stream()
+            .max(Map.Entry.comparingByValue(Comparator.comparingInt(Player::getScore)))
+            .map(Map.Entry::getKey)
+            .orElse("No winner");
     }
 }

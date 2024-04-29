@@ -1,22 +1,30 @@
 package clash_of_cards.controller;
 
 import clash_of_cards.model.GameModel;
-import clash_of_cards.view.GameView;
+import clash_of_cards.model.WinCountManager;
 import clash_of_cards.view.MainMenuView;
+import clash_of_cards.view.GameView;
+import clash_of_cards.view.HighScoresView;
 import clash_of_cards.view.GUITools;
+
 import javax.swing.*;
 
 public class MainMenuController {
     private MainMenuView view;
     private GameModel gameModel;
+    private HighScoresView highScoresView;
+    private WinCountManager winCountManager;
 
     public MainMenuController(MainMenuView view) {
         this.view = view;
+        this.winCountManager = new WinCountManager();
+        this.highScoresView = new HighScoresView(e -> showMainMenu(), winCountManager);
         attachEventHandlers();
     }
 
     private void attachEventHandlers() {
         view.play.addActionListener(e -> toggleButtonVisibility());
+        view.highScores.addActionListener(e -> showHighScores());
         view.startFamilyEdition.addActionListener(e -> showPlayerSelection());
         view.startNerdEdition.addActionListener(e -> showPlayerSelection());
         view.backButton.addActionListener(e -> showMainMenu());
@@ -54,7 +62,7 @@ public class MainMenuController {
     private void startGame() {
         if (gameModel == null) {
             String edition = view.startFamilyEdition.isSelected() ? "Family" : "Nerd";
-            gameModel = new GameModel(edition);
+            gameModel = new GameModel(edition, winCountManager);        
         }
         try {
             if (view.targetScoreField.isVisible() && !view.targetScoreField.getText().isEmpty()) {
@@ -117,7 +125,15 @@ public class MainMenuController {
         hideNameEntryComponents();
     }
 
+    private void showHighScores() {
+        highScoresView.show();
+        view.mainFrame.setVisible(false);
+    }
+
     public void showMainMenu() {
+        if (gameModel != null) {
+            gameModel.resetGame();
+        }
         setVisibilityForComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition, view.confirmNames, 
             view.pointsMode, view.roundsMode,view.playerThree, view.playerFour, view.playerFive}, false);
         setVisibilityForComponents(new JComponent[]{view.play, view.instructions, view.highScores}, true);
@@ -129,6 +145,7 @@ public class MainMenuController {
         view.startGame.setVisible(false);
         hideNameEntryComponents();
         view.mainFrame.setVisible(true);
+        highScoresView.hide();
     }
 
     private void setVisibilityForComponents(JComponent[] components, boolean visible) {

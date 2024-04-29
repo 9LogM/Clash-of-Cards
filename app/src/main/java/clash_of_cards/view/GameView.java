@@ -79,7 +79,7 @@ public class GameView {
         blackCardPanel.setBackground(new Color(80, 80, 80));
         roundLabel = new JLabel("Round " + gameModel.getCurrentRound());
         roundLabel.setForeground(Color.WHITE);
-        roundLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        roundLabel.setFont(new Font("Consolas", Font.BOLD, 18));
         roundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         blackCardPanel.add(roundLabel);
         blackCardPanel.add(Box.createVerticalStrut(10));
@@ -169,7 +169,8 @@ public class GameView {
     }
 
     private void showEndGame() {
-        JOptionPane.showMessageDialog(frame, "Game Over! Returning to main menu.");
+        String winner = gameModel.getWinner();
+        JOptionPane.showMessageDialog(frame, "Game Over! The winner is " + winner + ". Returning to main menu.");
         gameModel.resetGame();
         frame.dispose();
         mainMenuController.showMainMenu();
