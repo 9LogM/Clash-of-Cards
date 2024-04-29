@@ -17,6 +17,7 @@ public class GameController {
         this.textLoader = new ContentLoader(model.getEdition());
         this.view = new GameView(this, model);
         updateBlackCard();
+        updateJudgeStatus();
     }
 
     public void updateRound() {
@@ -25,7 +26,13 @@ public class GameController {
         } else {
             updateBlackCard();
             hideJudgeCards();
+            updateJudgeStatus();
         }
+    }
+
+    private void updateJudgeStatus() {
+        String currentJudge = model.getCurrentJudge();
+        view.updateJudge(currentJudge);
     }
 
     public void displayPlayerCards(String playerName) {

@@ -5,37 +5,34 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PlayerPanel extends JPanel implements ScoreObserver {
-    private static final Color FOREGROUND_COLOR = Color.WHITE;
-    private static final Font NAME_FONT = new Font("Consolas", Font.BOLD, 18);
-    private static final Font SCORE_FONT = new Font("Consolas", Font.BOLD, 18);
-    private static final Color SCORE_COLOR = new Color(255, 205, 0);
-    private static final Color BUTTON_BACKGROUND = new Color(50, 50, 50);
-    private static final Font BUTTON_FONT = new Font("Consolas", Font.BOLD, 16);
-
     private JLabel nameLabel;
     private JLabel scoreLabel;
+    private JButton viewCardsButton;
+    private String playerName;
 
     public PlayerPanel(String playerName, int score, Runnable viewCardsAction) {
+        this.playerName = playerName;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setOpaque(false);
+        this.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         nameLabel = new JLabel(playerName);
-        nameLabel.setForeground(FOREGROUND_COLOR);
-        nameLabel.setFont(NAME_FONT);
+        nameLabel.setForeground(Color.WHITE);
+        nameLabel.setFont(new Font("Consolas", Font.BOLD, 18));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         scoreLabel = new JLabel(String.valueOf(score));
-        scoreLabel.setForeground(SCORE_COLOR);        
-        scoreLabel.setFont(SCORE_FONT);
+        scoreLabel.setForeground(new Color(255, 205, 0));        
+        scoreLabel.setFont(new Font("Consolas", Font.BOLD, 18));
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton viewCardsButton = new JButton("View Cards");
+        viewCardsButton = new JButton("View Cards");
         viewCardsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        viewCardsButton.setForeground(FOREGROUND_COLOR);
-        viewCardsButton.setBackground(BUTTON_BACKGROUND);
+        viewCardsButton.setForeground(Color.WHITE);
+        viewCardsButton.setBackground(new Color(50, 50, 50));
         viewCardsButton.setBorderPainted(false);
         viewCardsButton.setFocusPainted(false);
-        viewCardsButton.setFont(BUTTON_FONT);
+        viewCardsButton.setFont(new Font("Consolas", Font.BOLD, 16));
         viewCardsButton.addActionListener(e -> viewCardsAction.run());
 
         this.add(nameLabel);
@@ -46,7 +43,14 @@ public class PlayerPanel extends JPanel implements ScoreObserver {
     @Override
     public void updateScore(int newScore) {
         scoreLabel.setText(String.valueOf(newScore));
-        this.revalidate();
-        this.repaint();
+    }
+
+    public void setJudge(boolean isJudge) {
+        viewCardsButton.setText(isJudge ? "Judge" : "View Cards");
+        viewCardsButton.setEnabled(!isJudge);
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 }

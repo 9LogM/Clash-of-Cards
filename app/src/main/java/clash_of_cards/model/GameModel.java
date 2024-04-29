@@ -13,6 +13,7 @@ public class GameModel {
     private HashMap<String, Player> playerCards;
     private HashMap<String, String> storedCards;
     private String edition;
+    private String currentJudge;
     private ContentLoader text;
     private int targetScore = 0;
     private int targetRounds = 0;
@@ -27,6 +28,7 @@ public class GameModel {
         this.storedCards = new HashMap<>();
         this.text = new ContentLoader(edition);
         this.playerNames = playerNames;
+        this.currentJudge = playerNames.get(0);
     }
 
     public void addObserver(String playerName, ScoreObserver observer) {
@@ -42,6 +44,14 @@ public class GameModel {
             int score = getPlayerScore(playerName);
             observers.get(playerName).updateScore(score);
         }
+    }
+
+    public String getCurrentJudge() {
+        return currentJudge;
+    }
+
+    public void setCurrentJudge(String judgeName) {
+        currentJudge = judgeName;
     }
 
     public void setTargetScore(int score) {
@@ -116,7 +126,7 @@ public class GameModel {
         Player winner = playerCards.get(winnerName);
         winner.incrementScore();
         notifyObservers(winnerName);
-        
+        setCurrentJudge(winnerName);
         Set<String> uniqueCards = new HashSet<>(storedCards.values());
         
         for (Player player : playerCards.values()) {

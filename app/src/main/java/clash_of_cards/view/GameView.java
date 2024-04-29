@@ -11,6 +11,7 @@ import java.util.function.BiConsumer;
 public class GameView {
     private JFrame frame;
     private JPanel mainPanel;
+    private JPanel scorePanel;
     private JPanel whiteCardsPanel;
     private JPanel blackCardPanel;
     private JLabel roundLabel;
@@ -56,7 +57,7 @@ public class GameView {
     }
 
     private void setupScorePanel(GridBagConstraints gbc) {
-        JPanel scorePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 30));
+        scorePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 30));
         scorePanel.setOpaque(false);
         gameModel.getPlayerNames().forEach(playerName -> {
             int score = gameModel.getPlayerScore(playerName);
@@ -89,6 +90,16 @@ public class GameView {
         blackCardPanel.revalidate();
         blackCardPanel.repaint();
     }
+
+    public void updateJudge(String newJudge) {
+        Component[] components = scorePanel.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof PlayerPanel) {
+                PlayerPanel panel = (PlayerPanel) comp;
+                panel.setJudge(panel.getPlayerName().equals(newJudge));
+            }
+        }
+    }    
 
     private void setupWhiteCardsPanel(GridBagConstraints gbc) {
         whiteCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
