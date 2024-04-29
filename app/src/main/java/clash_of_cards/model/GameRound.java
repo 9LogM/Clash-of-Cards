@@ -1,10 +1,12 @@
 package clash_of_cards.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GameRound {
+public class GameRound implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String currentJudge;
     private int currentRound;
     private HashMap<String, String> storedCards;

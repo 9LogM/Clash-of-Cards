@@ -3,13 +3,15 @@ package clash_of_cards.model;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class ContentLoader {
+public class ContentLoader implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final Random random = new Random();
     private final ArrayList<String> answers = new ArrayList<>();
     private final ArrayList<String> sentences = new ArrayList<>();

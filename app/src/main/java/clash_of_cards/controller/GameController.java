@@ -30,6 +30,11 @@ public class GameController {
         }
     }
 
+    public void updateBlackCard() {
+        String sentence = textLoader.getRandom("Sentence");
+        view.updateBlackCard(model.getCurrentRound(), sentence);
+    }
+
     private void updateJudgeStatus() {
         String currentJudge = model.getCurrentJudge();
         view.updateJudge(currentJudge);
@@ -70,8 +75,4 @@ public class GameController {
         showMainMenu();
     }
 
-    public void updateBlackCard() {
-        String sentence = textLoader.getRandom("Sentence");
-        view.updateBlackCard(model.getCurrentRound(), sentence);
-    }
 }

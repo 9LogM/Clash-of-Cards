@@ -2,9 +2,10 @@ package clash_of_cards.controller;
 
 import clash_of_cards.model.GameModel;
 import clash_of_cards.model.WinCountManager;
+import clash_of_cards.util.GUITools;
+import clash_of_cards.util.GameUtils;
 import clash_of_cards.view.MainMenuView;
 import clash_of_cards.view.HighScoresView;
-import clash_of_cards.view.GUITools;
 
 import javax.swing.*;
 
@@ -18,15 +19,16 @@ public class MainMenuController {
 
     public MainMenuController(MainMenuView view, ControllerMediator mediator) {
         this.mediator = mediator;
-        this.mediator.setMainMenuController(this);
         this.view = view;
         this.winCountManager = new WinCountManager();
         this.highScoresView = new HighScoresView(e -> showMainMenu(), winCountManager);
+        this.mediator.setMainMenuController(this);
         attachEventHandlers();
     }
 
     private void attachEventHandlers() {
-        view.play.addActionListener(e -> toggleButtonVisibility());
+        view.newGame.addActionListener(e -> newGame());
+        view.continueGame.addActionListener(e -> continueGame());
         view.highScores.addActionListener(e -> showHighScores());
         view.startFamilyEdition.addActionListener(e -> showPlayerSelection());
         view.startNerdEdition.addActionListener(e -> showPlayerSelection());
@@ -41,67 +43,80 @@ public class MainMenuController {
     }
 
     private void setupPointsMode() {
-        view.numberOfRoundsLabel.setVisible(false);
-        view.numberOfRoundsField.setVisible(false);
-        view.targetScoreLabel.setVisible(true);
-        view.targetScoreField.setVisible(true);
-        view.startGame.setVisible(true);
-        view.pointsMode.setVisible(false);
-        view.roundsMode.setVisible(false);
+        setVisibleComponents(new JComponent[]{view.numberOfRoundsLabel, view.numberOfRoundsField}, false);
+        setVisibleComponents(new JComponent[]{view.targetScoreLabel, view.targetScoreField, view.startGame}, true);
+        setVisibleComponents(new JComponent[]{view.pointsMode, view.roundsMode}, false);
         GUITools.updatePanel(view.mainPanel);
     }
-    
+
     private void setupRoundsMode() {
-        view.targetScoreLabel.setVisible(false);
-        view.targetScoreField.setVisible(false);
-        view.numberOfRoundsLabel.setVisible(true);
-        view.numberOfRoundsField.setVisible(true);
-        view.startGame.setVisible(true);
-        view.pointsMode.setVisible(false);
-        view.roundsMode.setVisible(false);
+        setVisibleComponents(new JComponent[]{view.targetScoreLabel, view.targetScoreField}, false);
+        setVisibleComponents(new JComponent[]{view.numberOfRoundsLabel, view.numberOfRoundsField, view.startGame}, true);
+        setVisibleComponents(new JComponent[]{view.pointsMode, view.roundsMode}, false);
         GUITools.updatePanel(view.mainPanel);
     }
 
     private void startGame() {
         if (gameModel == null) {
             String edition = view.startFamilyEdition.isSelected() ? "Family" : "Nerd";
-            gameModel = new GameModel(edition, winCountManager, view.confirmedPlayerNames);        
+            gameModel = new GameModel(edition, winCountManager, view.confirmedPlayerNames);
         }
         try {
-            if (view.targetScoreField.isVisible() && !view.targetScoreField.getText().isEmpty()) {
-                int targetScore = Integer.parseInt(view.targetScoreField.getText());
-                gameModel.setTargetScore(targetScore);
-            } else if (view.numberOfRoundsField.isVisible() && !view.numberOfRoundsField.getText().isEmpty()) {
-                int targetRounds = Integer.parseInt(view.numberOfRoundsField.getText());
-                gameModel.setTargetRounds(targetRounds);
-            }
+            setGameMode();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(view.mainFrame, "Invalid number format");
             return;
         }
-
         gameController = new GameController(gameModel, mediator);
         gameController.showGameView();
         view.mainFrame.setVisible(false);
     }
 
-    private void toggleButtonVisibility() {
-        boolean showMainButtons = !view.play.isVisible();
-        setVisibilityForComponents(new JComponent[]{view.play, view.instructions, view.highScores}, showMainButtons);
-        setVisibilityForComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition}, !showMainButtons);
-        view.targetScoreLabel.setVisible(false);
-        view.targetScoreField.setVisible(false);
-        view.numberOfRoundsLabel.setVisible(false);
-        view.numberOfRoundsField.setVisible(false);
-        view.backButton.setVisible(true);
-        view.startGame.setVisible(false);
-        hideNameEntryComponents();
+    private void setGameMode() throws NumberFormatException {
+        if (view.targetScoreField.isVisible() && !view.targetScoreField.getText().isEmpty()) {
+            gameModel.setTargetScore(Integer.parseInt(view.targetScoreField.getText()));
+        } else if (view.numberOfRoundsField.isVisible() && !view.numberOfRoundsField.getText().isEmpty()) {
+            gameModel.setTargetRounds(Integer.parseInt(view.numberOfRoundsField.getText()));
+        }
     }
 
+    private void continueGame() {
+        GameModel loadedGame = GameUtils.loadGame();
+        if (loadedGame != null) {
+            gameModel = loadedGame;
+            gameController = new GameController(gameModel, mediator);
+            gameController.showGameView();
+            view.mainFrame.setVisible(false);
+        } else {
+            JOptionPane.showMessageDialog(view.mainFrame, "No saved game found.");
+        }
+    }
+
+    private void newGame() {
+        if (gameModel != null) {
+            gameModel.resetGame();
+        }
+        view.targetScoreField.setText("");
+        view.numberOfRoundsField.setText("");
+        resetPlayerNameFields();
+        boolean showMainButtons = !view.newGame.isVisible();
+        setVisibleComponents(new JComponent[]{view.newGame, view.instructions, view.highScores}, showMainButtons);
+        setVisibleComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition}, !showMainButtons);
+        setVisibleComponents(new JComponent[]{view.targetScoreLabel, view.targetScoreField, view.numberOfRoundsLabel, view.numberOfRoundsField}, false);
+        view.backButton.setVisible(true);
+        view.continueGame.setVisible(false);
+        hideNameEntryComponents();
+    }
+    
+    private void resetPlayerNameFields() {
+        for (JTextField playerNameField : view.playerNames) {
+            playerNameField.setText("");
+        }
+    }    
+
     private void showPlayerSelection() {
-        setVisibilityForComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition}, false);
-        setVisibilityForComponents(new JComponent[]{view.playerThree, view.playerFour, view.playerFive}, true);
-        view.startGame.setVisible(false);
+        setVisibleComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition}, false);
+        setVisibleComponents(new JComponent[]{view.playerThree, view.playerFour, view.playerFive}, true);
         hideNameEntryComponents();
     }
 
@@ -109,9 +124,8 @@ public class MainMenuController {
         for (int i = 0; i < view.playerNames.length; i++) {
             view.playerNames[i].setVisible(i < numberOfPlayers);
         }
-        view.confirmNames.setVisible(true);
-        view.nameEntryPanel.setVisible(true);
-        setVisibilityForComponents(new JComponent[]{view.playerThree, view.playerFour, view.playerFive}, false);
+        setVisibleComponents(new JComponent[]{view.confirmNames, view.nameEntryPanel}, true);
+        setVisibleComponents(new JComponent[]{view.playerThree, view.playerFour, view.playerFive}, false);
         GUITools.updatePanel(view.nameEntryPanel);
     }
 
@@ -122,8 +136,8 @@ public class MainMenuController {
                 view.confirmedPlayerNames.add(playerName.getText().trim());
             }
         }
-        setVisibilityForComponents(new JComponent[]{view.pointsMode, view.roundsMode, view.backButton}, true);
-        setVisibilityForComponents(new JComponent[]{view.confirmNames, view.playerThree, view.playerFour, view.playerFive}, false);
+        setVisibleComponents(new JComponent[]{view.pointsMode, view.roundsMode, view.backButton}, true);
+        setVisibleComponents(new JComponent[]{view.confirmNames, view.playerThree, view.playerFour, view.playerFive}, false);
         GUITools.updatePanel(view.mainPanel);
         hideNameEntryComponents();
     }
@@ -134,24 +148,17 @@ public class MainMenuController {
     }
 
     public void showMainMenu() {
-        if (gameModel != null) {
-            gameModel.resetGame();
-        }
-        setVisibilityForComponents(new JComponent[]{view.startFamilyEdition, view.startNerdEdition, view.confirmNames, 
-            view.pointsMode, view.roundsMode,view.playerThree, view.playerFour, view.playerFive}, false);
-        setVisibilityForComponents(new JComponent[]{view.play, view.instructions, view.highScores}, true);
-        view.targetScoreLabel.setVisible(false);
-        view.targetScoreField.setVisible(false);
-        view.numberOfRoundsLabel.setVisible(false);
-        view.numberOfRoundsField.setVisible(false);
-        view.backButton.setVisible(false);
-        view.startGame.setVisible(false);
+        setVisibleComponents(new JComponent[]{
+            view.startFamilyEdition, view.startNerdEdition, view.confirmNames, view.pointsMode, view.roundsMode, view.playerThree, view.playerFour, view.playerFive
+        }, false);
+        setVisibleComponents(new JComponent[]{view.newGame, view.instructions, view.highScores, view.continueGame}, true);
+        setVisibleComponents(new JComponent[]{view.targetScoreLabel, view.targetScoreField, view.numberOfRoundsLabel, view.numberOfRoundsField, view.startGame, view.backButton}, false);
         hideNameEntryComponents();
         view.mainFrame.setVisible(true);
         highScoresView.hide();
     }
 
-    private void setVisibilityForComponents(JComponent[] components, boolean visible) {
+    private void setVisibleComponents(JComponent[] components, boolean visible) {
         for (JComponent component : components) {
             component.setVisible(visible);
         }

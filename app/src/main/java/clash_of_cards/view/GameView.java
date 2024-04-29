@@ -2,6 +2,9 @@ package clash_of_cards.view;
 
 import clash_of_cards.controller.GameController;
 import clash_of_cards.model.GameModel;
+import clash_of_cards.util.GUITools;
+import clash_of_cards.util.GameUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
@@ -109,17 +112,27 @@ public class GameView {
     }
 
     private void setupOptionsPanel(GridBagConstraints gbc) {
-        Runnable backAction = () -> {
-            frame.setVisible(false);
-            controller.showMainMenu();
-        };
-    
         JPanel optionsPanel = OptionsPanel.createOptionsPanel(
-            backAction,
+            saveAndExit(),
             this::clearWhiteCardsPanel,
             controller::displayStoredCards
         );
         mainPanel.add(optionsPanel, gbc);
+    }
+
+    public Runnable saveAndExit() {
+        Runnable saveExit = () -> {
+            if (gameModel != null) {
+                GameUtils.saveGame(gameModel);
+                JOptionPane.showMessageDialog(frame, "Game saved successfully.");
+            } else {
+                JOptionPane.showMessageDialog(frame, "No game in progress to save.");
+            }
+            frame.setVisible(false);
+            controller.showMainMenu();
+        };
+
+        return saveExit;
     }
 
     public void displayPlayerCards(List<String> cards, String playerName, BiConsumer<String, String> cardSelectedAction) {

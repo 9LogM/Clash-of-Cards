@@ -1,9 +1,11 @@
 package clash_of_cards.model;
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int score;
     private List<String> cards;
 

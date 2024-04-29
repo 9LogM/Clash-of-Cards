@@ -1,6 +1,7 @@
 package clash_of_cards.view;
 
 import clash_of_cards.model.WinCountManager;
+import clash_of_cards.util.GUITools;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Map;

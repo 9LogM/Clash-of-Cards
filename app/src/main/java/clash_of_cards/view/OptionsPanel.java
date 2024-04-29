@@ -1,5 +1,6 @@
 package clash_of_cards.view;
 
+import clash_of_cards.util.GUITools;
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +8,7 @@ public class OptionsPanel {
     private static final Color BACKGROUND_COLOR = new Color(70, 70, 70);
 
     public static JPanel createOptionsPanel(Runnable backAction, Runnable hideCardsAction, Runnable judgeCardsAction) {
-        JButton backButton = new JButton("Back to Main Menu");
+        JButton backButton = new JButton("Save and Exit");
         GUITools.styleButton(backButton);
         backButton.addActionListener(e -> backAction.run());
 

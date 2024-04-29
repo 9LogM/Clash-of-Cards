@@ -12,8 +12,11 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-# Personal highscores
+# Ignore personal highscores
 app/winCounts.properties
+
+# Ignore serialized game data
+app/game_data.ser
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties

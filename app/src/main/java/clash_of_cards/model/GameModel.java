@@ -1,21 +1,21 @@
 package clash_of_cards.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import clash_of_cards.model.GameRound;
-
-public class GameModel {
+public class GameModel implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private transient WinCountManager winCountManager;
+    private ContentLoader text;
     private List<String> playerNames;
     private HashMap<String, Player> playerCards;
     private String edition;
-    private ContentLoader text;
     private int targetScore = 0;
     private int targetRounds = 0;
-    private WinCountManager winCountManager;
     private HashMap<String, ScoreObserver> observers = new HashMap<>();
     private GameRound round;
 
@@ -131,10 +131,13 @@ public class GameModel {
     }
 
     public void resetGame() {
-        playerCards.clear();
         for (Player player : playerCards.values()) {
             player.resetScore();
         }
+        playerCards.clear();
         round.resetRound();
+        if (!playerNames.isEmpty()) {
+            round = new GameRound(this, playerNames.get(0));
+        }
     }
 }

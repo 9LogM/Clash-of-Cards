@@ -1,4 +1,4 @@
-package clash_of_cards.view;
+package clash_of_cards.util;
 
 import javax.swing.*;
 import java.awt.*;

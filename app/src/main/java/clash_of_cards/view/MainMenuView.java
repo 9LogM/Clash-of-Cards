@@ -1,5 +1,6 @@
 package clash_of_cards.view;
 
+import clash_of_cards.util.GUITools;
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
@@ -11,8 +12,8 @@ public class MainMenuView {
     public JPanel buttonPanel;
     public JPanel nameEntryPanel;
     public JLabel titleLabel, targetScoreLabel, numberOfRoundsLabel;
-    public JButton play, instructions, highScores, startFamilyEdition, startNerdEdition, confirmNames, pointsMode, roundsMode;
-    public JButton playerThree, playerFour, playerFive, backButton, startGame;
+    public JButton continueGame, newGame, instructions, highScores, startFamilyEdition, startNerdEdition, pointsMode, roundsMode;
+    public JButton playerThree, playerFour, playerFive, confirmNames, backButton, startGame;
     public JTextField targetScoreField, numberOfRoundsField;
     public JTextField[] playerNames;
     public List<String> confirmedPlayerNames;
@@ -25,7 +26,8 @@ public class MainMenuView {
     }
 
     public void initializeComponents() {
-        play = new JButton("Play");
+        continueGame = new JButton("Continue");
+        newGame = new JButton("New Game");
         instructions = new JButton("Instructions");
         highScores = new JButton("High Scores");
         startFamilyEdition = new JButton("Start Family Edition");
@@ -60,7 +62,8 @@ public class MainMenuView {
 
         GUITools.styleField(targetScoreField);
         GUITools.styleField(numberOfRoundsField);
-        GUITools.styleButton(play);
+        GUITools.styleButton(continueGame);
+        GUITools.styleButton(newGame);
         GUITools.styleButton(instructions);
         GUITools.styleButton(highScores);
         GUITools.styleButton(startFamilyEdition);
@@ -86,7 +89,8 @@ public class MainMenuView {
 
         buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(70, 70, 70));
-        buttonPanel.add(play);
+        buttonPanel.add(continueGame);
+        buttonPanel.add(newGame);
         buttonPanel.add(backButton);
         buttonPanel.add(instructions);
         buttonPanel.add(highScores);
