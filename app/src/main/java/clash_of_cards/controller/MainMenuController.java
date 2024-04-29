@@ -3,19 +3,22 @@ package clash_of_cards.controller;
 import clash_of_cards.model.GameModel;
 import clash_of_cards.model.WinCountManager;
 import clash_of_cards.view.MainMenuView;
-import clash_of_cards.view.GameView;
 import clash_of_cards.view.HighScoresView;
 import clash_of_cards.view.GUITools;
 
 import javax.swing.*;
 
 public class MainMenuController {
+    private ControllerMediator mediator;
     private MainMenuView view;
     private GameModel gameModel;
     private HighScoresView highScoresView;
     private WinCountManager winCountManager;
+    private GameController gameController;
 
-    public MainMenuController(MainMenuView view) {
+    public MainMenuController(MainMenuView view, ControllerMediator mediator) {
+        this.mediator = mediator;
+        this.mediator.setMainMenuController(this);
         this.view = view;
         this.winCountManager = new WinCountManager();
         this.highScoresView = new HighScoresView(e -> showMainMenu(), winCountManager);
@@ -62,7 +65,7 @@ public class MainMenuController {
     private void startGame() {
         if (gameModel == null) {
             String edition = view.startFamilyEdition.isSelected() ? "Family" : "Nerd";
-            gameModel = new GameModel(edition, winCountManager);        
+            gameModel = new GameModel(edition, winCountManager, view.confirmedPlayerNames);        
         }
         try {
             if (view.targetScoreField.isVisible() && !view.targetScoreField.getText().isEmpty()) {
@@ -76,10 +79,10 @@ public class MainMenuController {
             JOptionPane.showMessageDialog(view.mainFrame, "Invalid number format");
             return;
         }
-    
-        GameView gameView = new GameView(this, gameModel, view.confirmedPlayerNames);
+
+        gameController = new GameController(gameModel, mediator);
+        gameController.showGameView();
         view.mainFrame.setVisible(false);
-        gameView.showGameView();
     }
 
     private void toggleButtonVisibility() {

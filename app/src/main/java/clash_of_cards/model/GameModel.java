@@ -9,9 +9,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameModel {
-    private String edition;
+    private List<String> playerNames;
     private HashMap<String, Player> playerCards;
     private HashMap<String, String> storedCards;
+    private String edition;
     private ContentLoader text;
     private int targetScore = 0;
     private int targetRounds = 0;
@@ -19,12 +20,13 @@ public class GameModel {
     private WinCountManager winCountManager;
     private HashMap<String, ScoreObserver> observers = new HashMap<>();
 
-    public GameModel(String edition, WinCountManager winCountManager) {
+    public GameModel(String edition, WinCountManager winCountManager, List<String> playerNames) {
         this.edition = edition;
         this.winCountManager = winCountManager;
         this.playerCards = new HashMap<>();
         this.storedCards = new HashMap<>();
         this.text = new ContentLoader(edition);
+        this.playerNames = playerNames;
     }
 
     public void addObserver(String playerName, ScoreObserver observer) {
@@ -60,6 +62,10 @@ public class GameModel {
 
     public int getCurrentRound() {
         return currentRound;
+    }
+
+    public List<String> getPlayerNames() {
+        return playerNames;
     }
 
     public void assignCardsToPlayer(String playerName) {

@@ -1,13 +1,12 @@
 package clash_of_cards.view;
 
-import clash_of_cards.controller.MainMenuController;
+import clash_of_cards.controller.GameController;
 import clash_of_cards.model.GameModel;
-import clash_of_cards.model.ContentLoader;
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 public class GameView {
     private JFrame frame;
@@ -16,15 +15,11 @@ public class GameView {
     private JPanel blackCardPanel;
     private JLabel roundLabel;
     private GameModel gameModel;
-    private MainMenuController mainMenuController;
-    private List<String> playerNames;
-    private ContentLoader text;
+    private GameController controller;
 
-    public GameView(MainMenuController mainMenuController, GameModel gameModel, List<String> playerNames) {
-        this.mainMenuController = mainMenuController;
+    public GameView(GameController controller, GameModel gameModel) {
+        this.controller = controller;
         this.gameModel = gameModel;
-        this.playerNames = playerNames;
-        this.text = new ContentLoader(gameModel.getEdition());
         initializeFrame();
     }
 
@@ -63,13 +58,13 @@ public class GameView {
     private void setupScorePanel(GridBagConstraints gbc) {
         JPanel scorePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 30));
         scorePanel.setOpaque(false);
-        for (String playerName : playerNames) {
+        gameModel.getPlayerNames().forEach(playerName -> {
             int score = gameModel.getPlayerScore(playerName);
-            Runnable viewCardsAction = () -> displayPlayerCards(playerName);
+            Runnable viewCardsAction = () -> controller.displayPlayerCards(playerName);
             PlayerPanel playerPanel = new PlayerPanel(playerName, score, viewCardsAction);
             gameModel.addObserver(playerName, playerPanel);
             scorePanel.add(playerPanel);
-        }
+        });
         mainPanel.add(scorePanel, gbc);
     }
 
@@ -77,27 +72,24 @@ public class GameView {
         blackCardPanel = new JPanel();
         blackCardPanel.setLayout(new BoxLayout(blackCardPanel, BoxLayout.Y_AXIS));
         blackCardPanel.setBackground(new Color(80, 80, 80));
-        roundLabel = new JLabel("Round " + gameModel.getCurrentRound());
+        roundLabel = new JLabel();
         roundLabel.setForeground(Color.WHITE);
         roundLabel.setFont(new Font("Consolas", Font.BOLD, 18));
         roundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         blackCardPanel.add(roundLabel);
         blackCardPanel.add(Box.createVerticalStrut(10));
-        updateBlackCard();
         mainPanel.add(blackCardPanel, gbc);
     }
-    
-    private void updateBlackCard() {
-        String sentence = text.getRandom("Sentence");
+
+    public void updateBlackCard(int round, String sentence) {
+        roundLabel.setText("Round " + round);
         blackCardPanel.removeAll();
-        roundLabel.setText("Round " + gameModel.getCurrentRound());
         blackCardPanel.add(roundLabel);
-        blackCardPanel.add(Box.createVerticalStrut(10));
         blackCardPanel.add(BlackCard.createBlackCard(sentence));
         blackCardPanel.revalidate();
         blackCardPanel.repaint();
     }
-    
+
     private void setupWhiteCardsPanel(GridBagConstraints gbc) {
         whiteCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
         whiteCardsPanel.setBackground(new Color(80, 80, 80));
@@ -108,71 +100,49 @@ public class GameView {
     private void setupOptionsPanel(GridBagConstraints gbc) {
         Runnable backAction = () -> {
             frame.setVisible(false);
-            mainMenuController.showMainMenu();
+            controller.showMainMenu();
         };
-        Runnable hideCardsAction = this::hidePlayerCards;
-        Runnable judgeCardsAction = this::displayStoredCards;
-
-        JPanel optionsPanel = OptionsPanel.createOptionsPanel(backAction, hideCardsAction, judgeCardsAction);
+    
+        JPanel optionsPanel = OptionsPanel.createOptionsPanel(
+            backAction,
+            this::clearWhiteCardsPanel,
+            controller::displayStoredCards
+        );
         mainPanel.add(optionsPanel, gbc);
     }
 
-    private void displayPlayerCards(String playerName) {
-        whiteCardsPanel.removeAll();
+    public void displayPlayerCards(List<String> cards, String playerName, BiConsumer<String, String> cardSelectedAction) {
+        clearWhiteCardsPanel();
         ButtonGroup group = new ButtonGroup();
-        List<String> cards = gameModel.getPlayerCards(playerName);
-        for (String card : cards) {
-            Runnable onCardSelected = () -> gameModel.storeSelectedCard(playerName, card);
-            JToggleButton cardButton = WhiteCard.createWhiteCard(card, onCardSelected);
-            group.add(cardButton);
-            whiteCardsPanel.add(cardButton);
-        }
-        GUITools.updatePanel(whiteCardsPanel);
-    }
-
-    public void displayStoredCards() {
-        whiteCardsPanel.removeAll();
-        ButtonGroup group = new ButtonGroup();
-        gameModel.getStoredCards().forEach((playerName, card) -> {
-            Runnable selectAction = () -> {
-                gameModel.endRound(playerName);
-                updateRound();
-            };
-            JToggleButton cardButton = WhiteCard.createWhiteCard(card, selectAction);
+        cards.forEach(card -> {
+            JToggleButton cardButton = WhiteCard.createWhiteCard(card, () -> cardSelectedAction.accept(playerName, card));
             group.add(cardButton);
             whiteCardsPanel.add(cardButton);
         });
         GUITools.updatePanel(whiteCardsPanel);
     }
 
-    private void updateRound() {
-        if (gameModel.checkGameEnd()) {
-            showEndGame();
-        } else {
-            updateBlackCard();
-            hideJudgeCards();
-        }
+    public void displayStoredCards(Map<String, String> storedCards, BiConsumer<String, String> selectAction) {
+        clearWhiteCardsPanel();
+        ButtonGroup group = new ButtonGroup();
+        storedCards.forEach((playerName, card) -> {
+            JToggleButton cardButton = WhiteCard.createWhiteCard(card, () -> selectAction.accept(playerName, card));
+            group.add(cardButton);
+            whiteCardsPanel.add(cardButton);
+        });
+        GUITools.updatePanel(whiteCardsPanel);
     }
 
-    private void hideJudgeCards() {
+    public void clearWhiteCardsPanel() {
         whiteCardsPanel.removeAll();
         GUITools.updatePanel(whiteCardsPanel);
     }
 
-    private void hidePlayerCards() {
-        whiteCardsPanel.removeAll();
-        GUITools.updatePanel(whiteCardsPanel);
-    }
-
-    public void showGameView() {
+    public void show() {
         frame.setVisible(true);
     }
 
-    private void showEndGame() {
-        String winner = gameModel.getWinner();
-        JOptionPane.showMessageDialog(frame, "Game Over! The winner is " + winner + ". Returning to main menu.");
-        gameModel.resetGame();
+    public void dispose() {
         frame.dispose();
-        mainMenuController.showMainMenu();
     }
 }
