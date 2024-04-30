@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class WinCountManager {
+public class WinCountManager implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Properties winCounts = new Properties();
     private File winCountFile = new File("winCounts.properties");
     private List<WinObserver> observers = new ArrayList<>();

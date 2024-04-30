@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class GameModel implements Serializable {
     private static final long serialVersionUID = 1L;
-    private transient WinCountManager winCountManager;
+    private WinCountManager winCountManager;
     private ContentLoader text;
     private List<String> playerNames;
     private HashMap<String, Player> playerCards;
