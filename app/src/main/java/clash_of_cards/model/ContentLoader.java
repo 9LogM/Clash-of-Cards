@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import clash_of_cards.controller.GameController;
+
 public class ContentLoader implements Serializable {
     private static final long serialVersionUID = 1L;
     private final Random random = new Random();
@@ -17,6 +19,7 @@ public class ContentLoader implements Serializable {
     private final ArrayList<String> sentences = new ArrayList<>();
     private String edition;
     private String resourceFile;
+    private GameController gameController;
 
     public ContentLoader(String edition) {
         this.edition = edition;
@@ -56,6 +59,16 @@ public class ContentLoader implements Serializable {
 
     public String getRandom(String type) {
         ArrayList<String> list = type.equals("Answer") ? answers : sentences;
-        return !list.isEmpty() ? list.get(random.nextInt(list.size())) : "No " + type.toLowerCase() + " available.";
+        if (!list.isEmpty()) {
+            int index = random.nextInt(list.size());
+            String randomString = list.remove(index);
+            if (list.isEmpty()) {
+                loadContent(type);
+            }
+            return randomString;
+        } else {
+            return "No " + type.toLowerCase() + " available.";
+        }
     }
+    
 }
