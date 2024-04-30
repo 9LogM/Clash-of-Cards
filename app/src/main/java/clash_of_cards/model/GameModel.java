@@ -60,6 +60,8 @@ public class GameModel implements Serializable {
             return playerCards.values().stream().anyMatch(player -> player.getScore() >= targetScore);
         } else if (targetRounds > 0) {
             return round.getCurrentRound() > targetRounds;
+        } else if (!text.answersLeft() || !text.sentencesLeft()) {
+            return true;
         }
         return false;
     }

@@ -19,7 +19,8 @@ public class ContentLoader implements Serializable {
     private final ArrayList<String> sentences = new ArrayList<>();
     private String edition;
     private String resourceFile;
-    private GameController gameController;
+    private int answersLeft;
+    private int sentencesLeft;
 
     public ContentLoader(String edition) {
         this.edition = edition;
@@ -27,6 +28,8 @@ public class ContentLoader implements Serializable {
         loadContent("Answer");
         this.resourceFile = getResourceFileName("Sentence");
         loadContent("Sentence");
+        this.answersLeft = answers.size();
+        this.sentencesLeft = sentences.size();
     }
 
     private void loadContent(String type) {
@@ -62,6 +65,11 @@ public class ContentLoader implements Serializable {
         if (!list.isEmpty()) {
             int index = random.nextInt(list.size());
             String randomString = list.remove(index);
+            if (type.equals("Answer")) {
+                answersLeft--;
+            } else {
+                sentencesLeft--;
+            }
             if (list.isEmpty()) {
                 loadContent(type);
             }
@@ -69,6 +77,14 @@ public class ContentLoader implements Serializable {
         } else {
             return "No " + type.toLowerCase() + " available.";
         }
+    }
+
+    public boolean answersLeft() {
+        return answersLeft > 0;
+    }
+
+    public boolean sentencesLeft() {
+        return sentencesLeft > 0;
     }
     
 }
