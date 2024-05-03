@@ -23,6 +23,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    testImplementation("org.mockito:mockito-core:3.12.4")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
