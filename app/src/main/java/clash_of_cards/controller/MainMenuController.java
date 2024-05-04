@@ -136,6 +136,9 @@ public class MainMenuController {
                 view.confirmedPlayerNames.add(playerName.getText().trim());
             }
         }
+        if (gameModel != null) { 
+            gameModel.setInitialJudge(); 
+        }
         setVisibleComponents(new JComponent[]{view.pointsMode, view.roundsMode, view.backButton}, true);
         setVisibleComponents(new JComponent[]{view.confirmNames, view.playerThree, view.playerFour, view.playerFive}, false);
         GUITools.updatePanel(view.mainPanel);

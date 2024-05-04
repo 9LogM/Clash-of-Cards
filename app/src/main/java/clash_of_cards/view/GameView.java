@@ -7,8 +7,10 @@ import clash_of_cards.util.GameUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
+import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class GameView {
@@ -149,7 +151,11 @@ public class GameView {
     public void displayStoredCards(Map<String, String> storedCards, BiConsumer<String, String> selectAction) {
         clearWhiteCardsPanel();
         ButtonGroup group = new ButtonGroup();
-        storedCards.forEach((playerName, card) -> {
+        List<Map.Entry<String, String>> entries = new ArrayList<>(storedCards.entrySet());
+        Collections.shuffle(entries);
+        entries.forEach(entry -> {
+            String playerName = entry.getKey();
+            String card = entry.getValue();
             JToggleButton cardButton = WhiteCard.createWhiteCard(card, () -> selectAction.accept(playerName, card));
             group.add(cardButton);
             whiteCardsPanel.add(cardButton);

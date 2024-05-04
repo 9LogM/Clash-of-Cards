@@ -74,6 +74,12 @@ public class GameModel implements Serializable {
         this.targetRounds = rounds;
     }
 
+    public void setInitialJudge() { 
+        if (!playerNames.isEmpty()) { 
+            round.setCurrentJudge(playerNames.get(0)); 
+        } 
+    }
+
     public String getCurrentJudge() {
         return round.getCurrentJudge();
     }
@@ -138,8 +144,5 @@ public class GameModel implements Serializable {
         }
         playerCards.clear();
         round.resetRound();
-        if (!playerNames.isEmpty()) {
-            round = new GameRound(this, playerNames.get(0));
-        }
     }
 }
