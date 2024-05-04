@@ -7,7 +7,8 @@ import clash_of_cards.util.GameUtils;
 import clash_of_cards.view.MainMenuView;
 import clash_of_cards.view.InstructionsView;
 import clash_of_cards.view.HighScoresView;
-
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.*;
 
 public class MainMenuController {
@@ -135,14 +136,20 @@ public class MainMenuController {
     }
 
     private void confirmNames() {
-        view.confirmedPlayerNames.clear();
+        Set<String> uniqueNames = new HashSet<>();
         for (JTextField playerName : view.playerNames) {
-            if (playerName.isVisible() && !playerName.getText().trim().isEmpty()) {
-                view.confirmedPlayerNames.add(playerName.getText().trim());
+            if (playerName.isVisible()) {
+                String trimmedName = playerName.getText().trim();
+                if (trimmedName.isEmpty() || !uniqueNames.add(trimmedName)) {
+                    JOptionPane.showMessageDialog(view.mainFrame, "Please ensure all names are unique and non-empty.");
+                    return;
+                }
             }
         }
-        if (gameModel != null) { 
-            gameModel.setInitialJudge(); 
+        view.confirmedPlayerNames.clear();
+        view.confirmedPlayerNames.addAll(uniqueNames);
+        if (gameModel != null) {
+            gameModel.setInitialJudge();
         }
         setVisibleComponents(new JComponent[]{view.pointsMode, view.roundsMode, view.backButton}, true);
         setVisibleComponents(new JComponent[]{view.confirmNames, view.playerThree, view.playerFour, view.playerFive}, false);

@@ -7,10 +7,8 @@ import clash_of_cards.util.GameUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class GameView {
@@ -92,8 +90,7 @@ public class GameView {
         blackCardPanel.removeAll();
         blackCardPanel.add(roundLabel);
         blackCardPanel.add(BlackCard.createBlackCard(sentence));
-        blackCardPanel.revalidate();
-        blackCardPanel.repaint();
+        GUITools.updatePanel(blackCardPanel);
     }
 
     public void updateJudge(String newJudge) {
@@ -151,11 +148,7 @@ public class GameView {
     public void displayStoredCards(Map<String, String> storedCards, BiConsumer<String, String> selectAction) {
         clearWhiteCardsPanel();
         ButtonGroup group = new ButtonGroup();
-        List<Map.Entry<String, String>> entries = new ArrayList<>(storedCards.entrySet());
-        Collections.shuffle(entries);
-        entries.forEach(entry -> {
-            String playerName = entry.getKey();
-            String card = entry.getValue();
+        storedCards.forEach((playerName, card) -> {
             JToggleButton cardButton = WhiteCard.createWhiteCard(card, () -> selectAction.accept(playerName, card));
             group.add(cardButton);
             whiteCardsPanel.add(cardButton);
