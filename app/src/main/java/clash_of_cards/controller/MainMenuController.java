@@ -5,6 +5,7 @@ import clash_of_cards.model.WinCountManager;
 import clash_of_cards.util.GUITools;
 import clash_of_cards.util.GameUtils;
 import clash_of_cards.view.MainMenuView;
+import clash_of_cards.view.InstructionsView;
 import clash_of_cards.view.HighScoresView;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ public class MainMenuController {
     private ControllerMediator mediator;
     private MainMenuView view;
     private GameModel gameModel;
+    private InstructionsView instructionsView;
     private HighScoresView highScoresView;
     private WinCountManager winCountManager;
     private GameController gameController;
@@ -20,15 +22,18 @@ public class MainMenuController {
     public MainMenuController(MainMenuView view, ControllerMediator mediator) {
         this.mediator = mediator;
         this.view = view;
+        this.instructionsView = new InstructionsView(e -> showMainMenu());
         this.winCountManager = new WinCountManager();
         this.highScoresView = new HighScoresView(e -> showMainMenu(), winCountManager);
         this.mediator.setMainMenuController(this);
         attachEventHandlers();
     }
+    
 
     private void attachEventHandlers() {
         view.newGame.addActionListener(e -> newGame());
         view.continueGame.addActionListener(e -> continueGame());
+        view.instructions.addActionListener(e -> showInstructions());
         view.highScores.addActionListener(e -> showHighScores());
         view.startFamilyEdition.addActionListener(e -> showPlayerSelection());
         view.startNerdEdition.addActionListener(e -> showPlayerSelection());
@@ -145,6 +150,11 @@ public class MainMenuController {
         hideNameEntryComponents();
     }
 
+    private void showInstructions() {
+        instructionsView.show();
+        view.mainFrame.setVisible(false);
+    }
+
     private void showHighScores() {
         highScoresView.show();
         view.mainFrame.setVisible(false);
@@ -159,6 +169,7 @@ public class MainMenuController {
         hideNameEntryComponents();
         view.mainFrame.setVisible(true);
         highScoresView.hide();
+        instructionsView.hide();
     }
 
     private void setVisibleComponents(JComponent[] components, boolean visible) {
