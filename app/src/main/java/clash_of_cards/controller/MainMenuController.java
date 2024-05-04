@@ -67,10 +67,15 @@ public class MainMenuController {
             String edition = view.startFamilyEdition.isSelected() ? "Family" : "Nerd";
             gameModel = new GameModel(edition, winCountManager, view.confirmedPlayerNames);
         }
+        if ((view.targetScoreField.isVisible() && view.targetScoreField.getText().trim().isEmpty()) ||
+        (view.numberOfRoundsField.isVisible() && view.numberOfRoundsField.getText().trim().isEmpty())) {
+            JOptionPane.showMessageDialog(view.mainFrame, "Please ensure field is non-empty.");
+            return;
+        }
         try {
             setGameMode();
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(view.mainFrame, "Invalid number format");
+            JOptionPane.showMessageDialog(view.mainFrame, "Invalid number format.");
             return;
         }
         gameController = new GameController(gameModel, mediator);

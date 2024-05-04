@@ -6,6 +6,7 @@ import clash_of_cards.controller.ControllerMediator;
 
 public class App {
     public static void main(String[] args) {
+        System.setProperty("sun.awt.noerasebackground", "true");
         ControllerMediator mediator = new ControllerMediator();
         MainMenuView mainMenuView = new MainMenuView();
         MainMenuController mainMenuController = new MainMenuController(mainMenuView, mediator);
