@@ -38,7 +38,7 @@ public class InstructionsView {
         buttonPanel.add(backButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
-        instructionsText = new JTextArea("Insert detailed game instructions here...");
+        instructionsText = new JTextArea("There are two modes, Nerd and Family. The minimum players number are 3, and the max is 5. Every player is dealt with 6 cards, in the first round the first player is the judge, then the judge will be the winner of the previous round, the game ends when the number or max points or rounds are reached.");
         instructionsText.setFont(new Font("Consolas", Font.PLAIN, 40));
         instructionsText.setForeground(new Color(240, 240, 240));
         instructionsText.setBackground(new Color(80, 80, 80));
