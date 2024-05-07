@@ -76,4 +76,11 @@ class WinCountManagerTest {
         }
         assertTrue(props.isEmpty());
     }
+
+    @Test
+    void testIncrementWinCountExistingPlayer() throws IOException {   
+        winCountManager.incrementWinCount("existingPlayer");
+        winCountManager.incrementWinCount("existingPlayer");
+        assertEquals(2, winCountManager.getWinCount("existingPlayer"), "The win count should be incremented to 2.");
+    }
 }
