@@ -47,7 +47,7 @@ public class HighScoresView {
         resetScoresButton.addActionListener(e -> resetScores());
 
         buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setBackground(new Color(70, 70, 70));
+        buttonPanel.setBackground(new Color(80, 80, 80));
         buttonPanel.add(backButton);
         buttonPanel.add(resetScoresButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -57,7 +57,7 @@ public class HighScoresView {
         scoresTable.setFont(new Font("Consolas", Font.PLAIN, 40));
         scoresTable.setRowHeight(50);
         scoresTable.setForeground(new Color(240, 240, 240));
-        scoresTable.setBackground(new Color(80, 80, 80));
+        scoresTable.setBackground(new Color(50, 50, 50));
         scoresTable.setIntercellSpacing(new Dimension(0, 0));
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -65,7 +65,7 @@ public class HighScoresView {
         scoresTable.setDefaultRenderer(Object.class, centerRenderer);
 
         JScrollPane scrollPane = new JScrollPane(scoresTable);
-        scrollPane.getViewport().setBackground(new Color(80, 80, 80));         
+        scrollPane.getViewport().setBackground(new Color(50, 50, 50));         
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         panel.add(scrollPane, BorderLayout.CENTER);
 
@@ -75,7 +75,7 @@ public class HighScoresView {
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 setHorizontalAlignment(JLabel.CENTER);
-                setBackground(new Color(80, 80, 80));
+                setBackground(new Color(50, 50, 50));
                 setForeground(new Color(255, 205, 0));
                 setFont(new Font("Consolas", Font.BOLD, 45));
                 return this;
