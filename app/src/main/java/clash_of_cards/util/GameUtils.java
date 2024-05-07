@@ -13,7 +13,11 @@ public class GameUtils {
     }
 
     public static GameModel loadGame() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("game_data.ser"))) {
+        File file = new File("game_data.ser");
+        if (!file.exists()) {
+            return null;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             return (GameModel) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
